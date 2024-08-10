@@ -1,8 +1,8 @@
 import NextAuth from "next-auth"
-import GitHub from "next-auth/providers/github"
-import Google from "next-auth/providers/google"
-import Instagram from "next-auth/providers/instagram"
+import authConfig from "./auth.config"
+
  
-export const { handlers, auth, signIn, signOut } = NextAuth({
-  providers: [GitHub],
+export const { auth, handlers, signIn, signOut } = NextAuth({
+  session: { strategy: "jwt" },
+  ...authConfig,
 })

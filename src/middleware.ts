@@ -1,63 +1,35 @@
-export { auth as middleware } from "@/auth"
+import authConfig from "@/auth.config";
+import NextAuth from "next-auth";
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { parse } from 'cookie';
-import { jwtVerify, decodeJwt  } from 'jose'; 
 
-import { Default_Login_Redirect, apiAuthPrefix, authRoutes, protectedRoutes, publicRoutes } from "@/routes"
+import { Default_Login_Redirect, apiAuthPrefix, authRoutes, publicRoutes } from "@/routes";
 
+const { auth } = NextAuth(authConfig);
 
+export default auth((req, ctx) => { 
+    const { nextUrl } = req;
+    const isLoggedIn = req.auth;
+    const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+    const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+    const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-interface MyJwtPayload {
-  roles?: string[];
-  is_admin: boolean;
-}
-
-export async function auth(request: NextRequest) {
-  const protectedPaths = ['/settings', '/admin'];
-  const adminPaths = ['/admin'];
-
-  const cookieHeader = request.headers.get('cookie');
-  const cookies = cookieHeader ? parse(cookieHeader) : {};
-  const access_token = cookies.access_token || null;
-  const refresh_token = cookies.refresh_token || null;
-  const jwtSecret = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SECRET as string);
-  if (request.nextUrl.pathname === '/login' && (access_token || refresh_token)) {
-    return NextResponse.redirect(new URL('/', request.url));
-  }
-
-  if (protectedPaths.includes(request.nextUrl.pathname) && (!access_token || !refresh_token)) {
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
-
-  if (refresh_token) {
-    const decodedRefreshToken = decodeJwt(refresh_token);
-    const currentTime = Math.floor(Date.now() / 1000);
-
-    if (decodedRefreshToken.exp && decodedRefreshToken.exp < currentTime) {
-      return NextResponse.redirect(new URL('/login?sessionExpired=true', request.url));
-    }
-  }
-
-  // Check is_admin for admin paths
-  if (adminPaths.some(path => request.nextUrl.pathname.startsWith(path))) {
-    if (!access_token) {
-      return NextResponse.redirect(new URL('/login', request.url));
+    if (isApiAuthRoute || isPublicRoute) {
+        return NextResponse.next();
     }
 
-    try {
-      const { payload } = await jwtVerify(access_token, jwtSecret) as { payload: MyJwtPayload };
-      if (!payload.is_admin) {
-        return NextResponse.redirect(new URL('/', request.url));
-      }
-    } catch (error) {
-      return NextResponse.redirect(new URL('/login', request.url));
+    if (isAuthRoute) {
+        if (isLoggedIn) {
+            return NextResponse.redirect(new URL(Default_Login_Redirect, nextUrl));
+        }
+        return NextResponse.next();
     }
-  }
 
-  return NextResponse.next();
-}
+    if (!isLoggedIn) {
+        return NextResponse.redirect(new URL("/auth/login", nextUrl));
+    }
+    return NextResponse.next();
+});
 
 export const config = {
-  matcher: ['/settings', '/admin/:path*'],
+    matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };

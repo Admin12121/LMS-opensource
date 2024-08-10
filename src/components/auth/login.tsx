@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "../../schemas";
 import * as z from "zod";
+import axios from "axios";
+
 import {
   Form,
   FormControl,
@@ -22,8 +24,8 @@ import { useTransition, useState } from "react";
 
 const Login = () => {
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string >('');
-  const [success, setSuccess] = useState<string >('');
+  const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<string>("");
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -33,18 +35,29 @@ const Login = () => {
   });
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    setError('')
-    setSuccess('')
-    startTransition(()=>{
-        // login(values).then((res)=>{
-        //     if(res.error){
-        //         setError(res.error)
-        //     }
-        //     if(res.success){
-        //         setSuccess(res.success)
-        //     }
-        // })
-    })
+    setError("");
+    setSuccess("");
+    startTransition(() => {
+      axios
+        .post("/api/auth/login", values)
+        .then((response) => {
+          if (response.data.error) {
+            setError(response.data.error);
+          } else {
+            setSuccess("Login Successfull");
+            if (response.data.redirectUrl) {
+              window.location.href = response.data.redirectUrl;
+            }            
+          }
+        })
+        .catch((error) => {
+          setError(
+            error.response?.data?.error ||
+              "An error occurred. Please try again."
+          );
+          console.error("API call error:", error);
+        });
+    });
   };
 
   return (

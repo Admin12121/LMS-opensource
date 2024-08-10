@@ -9,7 +9,7 @@ export const protectedRoutes = [
 
 export const authRoutes = [
     "/auth/login",
-    "/auth/registration"
+    "/auth/register"
 ]
 
 
