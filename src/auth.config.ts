@@ -48,33 +48,26 @@ export default {
     Credentials({
       async authorize(credentials) {
         const ValidateFields = LoginSchema.safeParse(credentials);
-        console.log(ValidateFields)
         if (!ValidateFields.success) {
           return null; // Validation failed
         }
-
         const { email, password } = ValidateFields.data;
-
-        const response = await fetch('http://localhost:8000/api/accounts/users/login/', {
+        const response = await fetch(`${process.env.BACKEND_URL}/api/accounts/users/login/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ email, password }),
         });
-
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.error || 'Failed to log in');
         }
-
         const data = await response.json();
-
-        // Return the token and any other necessary user info
         return {
           id: email,
           email: email,
-          token: data.token, // Access and refresh tokens
+          token: data.token, 
           name: data.name, 
         } as UserWithToken;
       },
@@ -84,7 +77,7 @@ export default {
     async signIn({ user, account, profile }) {
       const userWithToken = user as UserWithToken;
       if (account?.provider !== 'credentials') {
-        const response = await fetch('http://localhost:8000/api/accounts/users/social_login/', {
+        const response = await fetch(`${process.env.BACKEND_URL}/api/accounts/users/social_login/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -115,7 +108,6 @@ export default {
       return true;
     },
     async jwt({ token, user }) {
-      // Attach the token to the JWT
       if (user && 'token' in user) {
         const userWithToken = user as UserWithToken;
         token.accessToken = userWithToken.token.access;
@@ -124,7 +116,6 @@ export default {
       return token;
     },
     async session({ session, token }) {
-      // Pass the token to the session
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
       return session;

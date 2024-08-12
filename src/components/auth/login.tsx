@@ -1,13 +1,13 @@
 "use client";
 
-import React from "react";
 import Cardwrapper from "./cardwrapper";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "../../schemas";
 import * as z from "zod";
 import axios from "axios";
-
+import { useSearchParams } from "next/navigation";
+import LoginError from "./login-error";
 import {
   Form,
   FormControl,
@@ -20,12 +20,14 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { FormError } from "../form-message/form-error";
 import { FormSuccess } from "../form-message/form-success";
-import { useTransition, useState } from "react";
+import { useTransition, useState, useEffect } from "react";
 
 const Login = () => {
+  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
+  const errorParam = searchParams.get("error");
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -59,6 +61,10 @@ const Login = () => {
         });
     });
   };
+
+  if (errorParam) {
+    return <LoginError errorParam={errorParam}/>;
+  }
 
   return (
     <Cardwrapper

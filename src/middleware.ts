@@ -25,11 +25,13 @@ export default auth((req, ctx) => {
     }
 
     if (!isLoggedIn) {
-        return NextResponse.redirect(new URL("/auth/login", nextUrl));
+        if(isAuthRoute){
+            return NextResponse.redirect(new URL("/auth/login", nextUrl));
+        }
     }
     return NextResponse.next();
 });
 
 export const config = {
-    matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+    matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)", "/auth/(.*)"],
 };

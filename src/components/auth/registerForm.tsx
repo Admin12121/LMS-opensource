@@ -20,11 +20,11 @@ import { FormError } from "../form-message/form-error";
 import { FormSuccess } from "../form-message/form-success";
 import { useTransition, useState } from "react";
 import axios from "axios";
+import useApi from '@/lib/useApi';
+import { Spinner } from "@nextui-org/spinner";
 
 const RegisterForm = () => {
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string >('');
-  const [success, setSuccess] = useState<string >('');
+  const { data, error, isLoading, fetchData } = useApi<any>(); // Replace 'any' with your data type
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -35,21 +35,10 @@ const RegisterForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
-    setError('');
-    setSuccess('');
-    startTransition(() => {
-      axios.post('/api/auth/registration', values)
-        .then((response) => {
-          if (response.data.error) {
-            setError(response.data.error);
-          } else {
-            setSuccess('User created successfully');
-          }
-        })
-        .catch((error) => {
-          setError(error.response?.data?.error || 'An error occurred. Please try again.');
-          console.error('API call error:', error);
-        });
+    fetchData({
+      url: '/api/auth/registration',
+      method: 'POST',
+      data: values
     });
   };
 
@@ -72,7 +61,7 @@ const RegisterForm = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={isPending}
+                      disabled={isLoading}
                       type="text"
                       placeholder="John Doe"
                     />
@@ -90,7 +79,7 @@ const RegisterForm = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={isPending}
+                      disabled={isLoading}
                       type="email"
                       placeholder="john@gmail.com"
                     />
@@ -108,7 +97,7 @@ const RegisterForm = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={isPending}
+                      disabled={isLoading}
                       type="password"
                       placeholder="********"
                       autoComplete="off"
@@ -120,8 +109,8 @@ const RegisterForm = () => {
             />
           </div>
           <FormError message={error} />
-          <FormSuccess message={success} />
-          <Button disabled={isPending} type="submit" className="w-full">
+          <FormSuccess message={data?.message} />
+          <Button disabled={isLoading} loading={isLoading} type="submit" className="w-full">
             Create Account
           </Button>
         </form>
