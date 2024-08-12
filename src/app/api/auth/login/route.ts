@@ -20,27 +20,33 @@ export async function POST(request: NextRequest) {
     const { email, password } = data;
 
     try {
-      await signIn("credentials", {
+      const result = await signIn("credentials", {
         email,
         password,
         redirect: false,
       });
+      if (result?.error) {
+        return NextResponse.json(
+          { error: result.error },
+          { status: 401 }
+        );
+      }
+      return NextResponse.json(
+        { message: "Login Successful", success: true, redirectUrl: Default_Login_Redirect, },
+        { status: 200 }
+      );            
     } catch (error) {
       if (error instanceof AuthError) {
+        console.log("error", error, error.cause?.err?.message)
         return NextResponse.json(
-          { error: error.type === "CredentialsSignin" ? "Invalid credentials!" : "Something went wrong!" },
+          { error: error.cause?.err?.message ? error.cause?.err?.message : error.type === "CredentialsSignin" ? "Invalid credentials!" : "Something went wrong!" },
           { status: 401 }
         );
       }
       throw error;
     }
 
-    return NextResponse.json(
-      { message: "Login Successful", success: true, redirectUrl: Default_Login_Redirect, },
-      { status: 200 }
-    );
   } catch (error: any) {
-    console.error("Login error:", error);
     return NextResponse.json(
       { error: error.message || "Internal Server Error" },
       { status: 500 }

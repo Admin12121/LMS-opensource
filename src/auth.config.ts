@@ -29,6 +29,7 @@ interface UserWithToken extends User {
     refresh: string;
   };
   name: string;
+  message?: string;
 }
 
 export default {
@@ -59,11 +60,20 @@ export default {
           },
           body: JSON.stringify({ email, password }),
         });
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Failed to log in');
-        }
         const data = await response.json();
+        if (!response.ok) {
+          const errorMessage = data.error || 'Failed to log in';
+          console.log(errorMessage)
+          throw new Error(errorMessage);
+        }
+        if (data.message === 'Acivation link sent to your email') {
+          console.log("first")
+          return {
+            id: email,
+            email: email,
+            message: 'Activation link sent to your email',
+          } as UserWithToken;
+        }        
         return {
           id: email,
           email: email,
@@ -76,6 +86,9 @@ export default {
   callbacks: {
     async signIn({ user, account, profile }) {
       const userWithToken = user as UserWithToken;
+      if (userWithToken?.message === 'Activation link sent to your email') {
+        throw new Error('Activation link sent to your email');
+      }
       if (account?.provider !== 'credentials') {
         const response = await fetch(`${process.env.BACKEND_URL}/api/accounts/users/social_login/`, {
           method: 'POST',

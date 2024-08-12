@@ -9,6 +9,7 @@ const Settings = async () => {
       <form action={async () =>{
         "use server";
         await signOut();
+        window.location.href = "/";
       }}>
         <Button type="submit" className="w-50">
           Logout
