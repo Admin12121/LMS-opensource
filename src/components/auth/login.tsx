@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "../../schemas";
 import * as z from "zod";
-import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import LoginError from "./login-error";
 import {
@@ -20,12 +19,13 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { FormError } from "../form-message/form-error";
 import { FormSuccess } from "../form-message/form-success";
-import { useTransition, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import useApi from '@/lib/useApi';
 
 const Login = () => {
+  const { data, error, isLoading, fetchData } = useApi<any>(); 
   const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
   const errorParam = searchParams.get("error");
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -37,30 +37,21 @@ const Login = () => {
   });
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    setError("");
-    setSuccess("");
-    startTransition(() => {
-      axios
-        .post("/api/auth/login", values)
-        .then((response) => {
-          if (response.data.error) {
-            setError(response.data.error);
-          } else {
-            setSuccess("Login Successfull");
-            if (response.data.redirectUrl) {
-              window.location.href = response.data.redirectUrl;
-            }            
-          }
-        })
-        .catch((error) => {
-          setError(
-            error.response?.data?.error ||
-              "An error occurred. Please try again."
-          );
-          console.error("API call error:", error);
-        });
+    fetchData({
+      url: '/api/auth/login',
+      method: 'POST',
+      data: values
     });
   };
+
+  useEffect(()=>{
+    if(data){
+      setSuccess("Login Successfull");
+      if(data.redirectUrl){
+        window.location.href = data.redirectUrl;
+      }
+    }
+  },[data])
 
   if (errorParam) {
     return <LoginError errorParam={errorParam}/>;
@@ -85,7 +76,7 @@ const Login = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={isPending}
+                      disabled={isLoading}
                       type="email"
                       placeholder="john@gmail.com"
                     />
@@ -103,7 +94,7 @@ const Login = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      disabled={isPending}
+                      disabled={isLoading}
                       type="password"
                       placeholder="********"
                       autoComplete="off"
@@ -114,9 +105,12 @@ const Login = () => {
               )}
             />
           </div>
+          <Button size="sm" variant="link" asChild className="px-0 !mt-2 font-normal">
+            <Link href="/auth/reset-password">Forgot Password?</Link>
+          </Button>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button disabled={isPending} type="submit" className="w-full">
+          <Button disabled={isLoading} loading={isLoading} type="submit" className="w-full !mt-2">
             Login
           </Button>
         </form>

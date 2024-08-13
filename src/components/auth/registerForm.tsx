@@ -18,10 +18,8 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { FormError } from "../form-message/form-error";
 import { FormSuccess } from "../form-message/form-success";
-import { useTransition, useState } from "react";
-import axios from "axios";
 import useApi from '@/lib/useApi';
-import { Spinner } from "@nextui-org/spinner";
+
 
 const RegisterForm = () => {
   const { data, error, isLoading, fetchData } = useApi<any>(); // Replace 'any' with your data type
