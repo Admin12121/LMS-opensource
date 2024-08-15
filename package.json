@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
+    "@nextui-org/kbd": "^2.0.33",
     "@nextui-org/spinner": "^2.0.33",
     "@nextui-org/system": "^2.2.5",
     "@nextui-org/theme": "^2.2.9",

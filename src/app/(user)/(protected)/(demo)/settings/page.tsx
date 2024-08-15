@@ -1,5 +1,4 @@
 import { auth, signOut } from "@/auth";
-import { Button } from "@/components/ui/button";
 import { AdminPanel1 } from "@/components/admin-panel/admin-panel1";
 import { cookies } from "next/headers"
 
@@ -24,12 +23,14 @@ const Settings = async () => {
         </Button>
       </form> */}
         <AdminPanel1
-          // accounts={accounts}
-          // mails={mails}
           defaultLayout={defaultLayout}
           defaultCollapsed={defaultCollapsed}
           navCollapsedSize={4}
-        />
+        >
+          <div>
+            <h1>Settings</h1>
+          </div>
+        </AdminPanel1>
     </div>
   );
 };

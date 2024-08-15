@@ -31,26 +31,6 @@ export function Menu({ isOpen }: MenuProps) {
           <li className="w-full"></li>
           {menuList.map(({ groupLabel, menus }, index) => (
             <li className={cn("w-full", groupLabel ? "pt-0" : "")} key={index}>
-              {/* {(isOpen && groupLabel) || isOpen === undefined ? (
-                <p className="text-sm font-medium text-muted-foreground px-4 pb-2 max-w-[248px] truncate">
-                  {groupLabel}
-                </p>
-              ) : !isOpen && isOpen !== undefined && groupLabel ? (
-                <TooltipProvider>
-                  <Tooltip delayDuration={100}>
-                    <TooltipTrigger className="w-full">
-                      <div className="w-full flex justify-center items-center">
-                        <Ellipsis className="h-5 w-5" />
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
-                      <p>{groupLabel}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              ) : (
-                <p className="pb-2"></p>
-              )} */}
               {menus.map(
                 ({ href, label, icon: Icon, active, submenus }, index) =>
                   submenus.length === 0 ? (
