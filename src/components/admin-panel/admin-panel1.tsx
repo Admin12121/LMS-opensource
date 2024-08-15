@@ -17,6 +17,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { useState, useEffect } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AccountSwitcher } from "@/components/admin-panel/account-switcher";
 import { Nav } from "@/components/admin-panel/nav";
@@ -38,7 +39,32 @@ export function AdminPanel1({
   children,
 }: PanalProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
+  const [maxSize, setMaxSize] = useState(20);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      let maxSizeValue;
+      if (width <= 1200 && width >= 768) {
+        maxSizeValue = 35 - ((width - 768) / (1200 - 768)) * 10;
+      } else if (width < 768) {
+        maxSizeValue = 20;
+      } else {
+        maxSizeValue = 20;
+      }
+      console.log('Width:', width, 'MaxSize:', maxSizeValue); // Debugging line
+      setMaxSize(maxSizeValue);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Set initial value
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <TooltipProvider delayDuration={0}>
       <ResizablePanelGroup
@@ -55,7 +81,7 @@ export function AdminPanel1({
           collapsedSize={navCollapsedSize}
           collapsible={true}
           minSize={15}
-          maxSize={20}
+          maxSize={maxSize}
           onCollapse={() => {
             setIsCollapsed(true);
             document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(
