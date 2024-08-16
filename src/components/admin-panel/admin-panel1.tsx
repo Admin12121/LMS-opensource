@@ -74,7 +74,7 @@ export function AdminPanel1({
             sizes
           )}`;
         }}
-        className="h-full items-stretch"
+        className="h-full items-stretch max-w-[2400px]"
       >
         <ResizablePanel
           defaultSize={defaultLayout[0]}
@@ -110,12 +110,12 @@ export function AdminPanel1({
             </div>
             { <div className=" p-2">
               <form>
-                <div className="relative dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white rounded-lg">
-                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                <div className={`relative dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white rounded-lg ${isCollapsed ? "w-[36px] h-[36px]" : "w-full"}`}>
+                {isCollapsed ? <></> : <> <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
                     placeholder="Search"
                     className="pl-8 border-0 focus:outline-none focus-visible:ring-0"
-                  />
+                  /></>}
                   <Kbd
                     keys={["command"]}
                     className="rounded-md absolute right-2 top-[6px] shadow-lg"

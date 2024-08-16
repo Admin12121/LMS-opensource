@@ -27,7 +27,7 @@ export default async function TaskPage() {
 
   return (
     <>
-      <div className="h-[calc(100vh-100px)] overflow-hidden overflow-y-auto flex-1 flex-col space-y-8 py-8 px-0 md:flex">
+      <div className="h-[calc(100vh-100px)] overflow-hidden flex-1 flex-col space-y-8 py-8 px-0 md:flex">
         <DataTable data={tasks} columns={columns} />
       </div>
     </>

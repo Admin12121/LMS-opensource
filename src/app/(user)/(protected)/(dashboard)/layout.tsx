@@ -1,4 +1,4 @@
-import AdminPanelLayout from "@/components/admin-panel/admin-panel-layout";
+// import AdminPanelLayout from "@/components/admin-panel/admin-panel-layout";
 import { AdminPanel1 } from "@/components/admin-panel/admin-panel1";
 import { cookies } from "next/headers"
 export default function DemoLayout({
