@@ -19,6 +19,7 @@ interface NavProps {
     icon: LucideIcon
     href?: string
     variant: "default" | "ghost"
+    prefetch?: boolean;
   }[]
 }
 
@@ -59,6 +60,7 @@ export function Nav({ links, isCollapsed }: NavProps) {
             <Link
               key={index}
               href={link.href || "#"}
+              prefetch={link.prefetch ? link.prefetch : false}
               className={cn(
                 buttonVariants({ variant: link.variant, size: "sm" }),
                 link.variant === "default" &&

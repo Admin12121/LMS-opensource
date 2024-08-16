@@ -146,6 +146,7 @@ export function AdminPanel1({
                   icon: List,
                   href: "/courses",
                   variant: pathname === "/courses" ? "default" : "ghost",
+                  prefetch: true,
                 },
                 {
                   title: "Users",
@@ -181,7 +182,7 @@ export function AdminPanel1({
           </div>
         </ResizablePanel>
         <ResizableHandle withHandle className="bg-transparent w-2 max-md:hidden" />
-        <ResizablePanel defaultSize={defaultLayout[1]} minSize={30} className="p-2">
+        <ResizablePanel defaultSize={defaultLayout[1]} minSize={30} className="p-2 overflow-hidden overflow-y-auto h-[100vh]">
           {children}
         </ResizablePanel>
       </ResizablePanelGroup>

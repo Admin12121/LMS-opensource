@@ -1,6 +1,4 @@
 import Link from "next/link";
-
-import PlaceholderContent from "@/components/demo/placeholder-content";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
 import {
   Breadcrumb,
@@ -10,10 +8,17 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
+// import TaskPage  from "@/components/table/tablewrapper";
+import dynamic from 'next/dynamic';
+
+const TaskPage = dynamic(() => import('@/components/table/tablewrapper'), {
+  loading: () => <p>Loading...</p>,
+  ssr: true, // or ssr: false based on your needs
+});
 
 export default function CategoriesPage() {
   return (
-    <ContentLayout title="Categories">
+    <ContentLayout title="Categories" classname="pt-2">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -33,7 +38,7 @@ export default function CategoriesPage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <PlaceholderContent />
+      <TaskPage />
     </ContentLayout>
   );
 }
