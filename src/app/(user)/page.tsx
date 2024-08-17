@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import LoginButton from "@/components/auth/login-button";
 export default function Home() {
   return (
-    <main className="flex flex-col items-center justify-center h-full bg-blue-400">
+    <main className="flex flex-col items-center justify-center h-full bg-blue-400 w-full">
       <div className="space-y-6 text-center">
         <h1 className="text-6xl font-bold text-white drop-shadow-md">
           Welcome to the Home Page
