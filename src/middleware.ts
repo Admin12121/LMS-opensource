@@ -29,7 +29,6 @@ export default auth((req, ctx) => {
     }
 
     if (!isLoggedIn) {
-        console.log("isAuthRoute", nextUrl.pathname, isAuthRoute);
         if(!isAuthRoute){
             return NextResponse.redirect(new URL("/auth/login", nextUrl));
         }
