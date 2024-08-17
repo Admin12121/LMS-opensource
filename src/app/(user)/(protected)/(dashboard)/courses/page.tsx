@@ -13,7 +13,7 @@ import dynamic from 'next/dynamic';
 
 const TaskPage = dynamic(() => import('@/components/table/tablewrapper'), {
   loading: () => <p>Loading...</p>,
-  ssr: true, // or ssr: false based on your needs
+  ssr: true,
 });
 
 export default function CategoriesPage() {

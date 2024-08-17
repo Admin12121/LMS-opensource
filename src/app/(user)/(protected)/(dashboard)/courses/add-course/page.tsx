@@ -8,6 +8,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
+import dynamic from 'next/dynamic';
+
+const AddCourse = dynamic(() => import('@/components/user/courses/add-course/add-course'), { ssr: false })
 
 export default function CategoriesPage() {
   return (
@@ -37,7 +40,7 @@ export default function CategoriesPage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      {/* <TaskPage /> */}
+      <AddCourse />
     </ContentLayout>
   );
 }
