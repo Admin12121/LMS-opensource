@@ -27,7 +27,6 @@ const Activate = () => {
     const verifyToken = async () => {
       try {
         setStatus('Decrypting token...');
-        console.log(process.env.NEXT_PUBLIC_BACKEND_URL)
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/accounts/activate/${uid}/${token}/`, {
           method: 'GET', 
           headers: {

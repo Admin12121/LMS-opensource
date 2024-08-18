@@ -53,7 +53,6 @@ export function AdminPanel1({
       } else {
         maxSizeValue = 20;
       }
-      console.log('Width:', width, 'MaxSize:', maxSizeValue); // Debugging line
       setMaxSize(maxSizeValue);
     };
 

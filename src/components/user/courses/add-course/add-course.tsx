@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner"
 import {useCreateCourseMutation} from "@/lib/store/Service/User_Auth_Api"
 import { getAccessToken } from "@/actions/gettoken";
+import { useRouter } from 'next/navigation';
 
 const FormSchema = z.object({
   title: z.string().min(2, {
@@ -25,6 +26,7 @@ const FormSchema = z.object({
 });
 
 export default function AddCourse() {
+  const router = useRouter();
   const [CreateCourse, { isLoading }] = useCreateCourseMutation({})
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -35,11 +37,10 @@ export default function AddCourse() {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     const accessToken = await getAccessToken()
-    console.log("accessToken", accessToken, data)
     const res = await CreateCourse({data, accessToken});
-    console.log(res, accessToken)
     if(res.data){
       toast.success('Course Created successfully!');
+      router.push(`/courses/add-course/${res.data.courseslug}`);
     }else if (res.error){
       toast.error('Failed to create Course');
     }    
@@ -79,8 +80,8 @@ export default function AddCourse() {
             )}
           />
           <span className="flex gap-2">
-            <Button type="button" variant="ghost">Cancel</Button>
-            <Button type="submit">Submit</Button>
+            <Button disabled={isLoading} type="button" variant="ghost">Cancel</Button>
+            <Button disabled={isLoading || !form.watch("title")} loading={isLoading} type="submit">Submit</Button>
           </span>
         </form>
       </Form>

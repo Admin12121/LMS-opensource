@@ -1,8 +1,8 @@
+"use server"
+
 import { auth } from "@/auth";
 
 export const getAccessToken = async (): Promise<string | null> => {
-  console.log("run")
-    const session = await auth();
-    console.log("session_token",session?.accessToken)
-    return session?.accessToken || null;
+  const session = await auth(); // Must run on server-side only
+  return session?.accessToken || null;
 };

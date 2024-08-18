@@ -22,8 +22,10 @@ import { FormSuccess } from "../form-message/form-success";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import useApi from '@/lib/useApi';
+import { useRouter } from 'next/navigation';
 
 const Login = () => {
+  const router = useRouter();
   const { data, error, isLoading, fetchData } = useApi<any>(); 
   const searchParams = useSearchParams();
   const [success, setSuccess] = useState<string>("");
@@ -48,7 +50,7 @@ const Login = () => {
     if(data){
       setSuccess("Login Successfull");
       if(data.redirectUrl){
-        window.location.href = data.redirectUrl;
+        router.push(data.redirectUrl);
       }
     }
   },[data])

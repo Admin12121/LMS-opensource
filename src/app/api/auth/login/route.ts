@@ -31,13 +31,13 @@ export async function POST(request: NextRequest) {
           { status: 401 }
         );
       }
+      console.log('result', result)
       return NextResponse.json(
         { message: "Login Successful", success: true, redirectUrl: Default_Login_Redirect, },
         { status: 200 }
       );            
     } catch (error) {
       if (error instanceof AuthError) {
-        console.log("error", error, error.cause?.err?.message)
         return NextResponse.json(
           { error: error.cause?.err?.message ? error.cause?.err?.message : error.type === "CredentialsSignin" ? "Invalid credentials!" : "Something went wrong!" },
           { status: 401 }
