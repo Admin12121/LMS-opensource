@@ -1,0 +1,28 @@
+.ql-snow{
+    border: 0 !important;
+}
+
+.ql-formats{
+    button{
+        border-radius: 4px !important;
+        margin-left: 3px !important;
+        background: #101010 !important;
+    }
+}
+.ql-snow .ql-stroke{
+    stroke: #ffffff88 !important;
+}
+
+.ql-picker{
+    border-radius: 3px !important;
+    /* padding: 1px !important; */
+    background: #101010 !important;
+    outline:  none;
+    border: none;
+}
+
+.ql-container {
+    border: 1px solid #ffffff5d !important;
+    border-radius: 7px !important;
+    height: 200px;
+}

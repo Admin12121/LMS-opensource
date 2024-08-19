@@ -30,7 +30,6 @@ export const userAuthapi = createApi({
         body: value,
         headers: {
           authorization: `Bearer ${accessToken}`,
-          ...(value?.image && { 'Content-Type': 'multipart/form-data' }),
         },
       }),
     }), 

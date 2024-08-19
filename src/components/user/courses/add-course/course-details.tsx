@@ -6,6 +6,7 @@ import TitleForm from "./components/titleForm";
 import { SpinnerLoader } from "@/components/ui/spinner";
 import DescriptionForm from "./components/descriptionForm";
 import ImageUploaderForm from "./components/imageUploaderForm";
+import CourseCategory from "./components/courseCategory";
 const CourseDetails = ({
   params,
   accessToken,
@@ -34,6 +35,7 @@ const CourseDetails = ({
             <TitleForm slug={params} initialData={data} refetch={refetch} />
             <DescriptionForm slug={params} initialData={data} refetch={refetch} />
             <ImageUploaderForm slug={params} initialData={data} refetch={refetch} />
+            <CourseCategory slug={params} initialData={data} refetch={refetch}/>
           </div>
         </div>
       )}
