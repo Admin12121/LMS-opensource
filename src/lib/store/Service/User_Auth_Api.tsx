@@ -23,10 +23,22 @@ export const userAuthapi = createApi({
         },
       }),
     }), 
+    updateCourse: builder.mutation({
+      query: ({slug, value, accessToken}) => ({
+        url: `/api/courses/${slug ? `${slug}/` :""}`,
+        method: "PATCH",
+        body: value,
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+          ...(value?.image && { 'Content-Type': 'multipart/form-data' }),
+        },
+      }),
+    }), 
   }),
 });
 
 export const {
   useCreateCourseMutation,
   useGetCourseQuery,
+  useUpdateCourseMutation,
 } = userAuthapi;
