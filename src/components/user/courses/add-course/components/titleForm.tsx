@@ -92,7 +92,7 @@ const TitleForm = ({ slug, initialData, refetch }: TitleFormProps) => {
                 </FormItem>
             )}/>
             <div className="flex items-center gap-x-2">
-                <Button disabled={!isValid || isSubmitting} type="submit">Save</Button>
+                <Button disabled={!isValid || isSubmitting} loading={isLoading} type="submit">Save</Button>
             </div>
           </form>
         </Form>
@@ -101,4 +101,4 @@ const TitleForm = ({ slug, initialData, refetch }: TitleFormProps) => {
   );
 };
 
-export default TitleForm;''
+export default TitleForm;

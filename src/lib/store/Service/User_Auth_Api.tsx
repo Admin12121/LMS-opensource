@@ -33,6 +33,35 @@ export const userAuthapi = createApi({
         },
       }),
     }), 
+    createCategory: builder.mutation({
+      query: ({data, accessToken}) => ({
+        url: "/api/category/",
+        method: "POST",
+        body: data,
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }), 
+    getCategory: builder.query({
+      query: ({params, accessToken}) => ({
+        url: `/api/category/${params ? `${params}/` :""}`,
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }), 
+    updateCategory: builder.mutation({
+      query: ({slug, value, accessToken}) => ({
+        url: `/api/category/${slug ? `${slug}/` :""}`,
+        method: "PATCH",
+        body: value,
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }), 
   }),
 });
 
@@ -40,4 +69,6 @@ export const {
   useCreateCourseMutation,
   useGetCourseQuery,
   useUpdateCourseMutation,
+  useGetCategoryQuery,
+  useUpdateCategoryMutation,
 } = userAuthapi;

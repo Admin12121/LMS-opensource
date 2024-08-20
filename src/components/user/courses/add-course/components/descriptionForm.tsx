@@ -101,13 +101,13 @@ const DescriptionForm = ({ slug, initialData, refetch }: TitleFormProps) => {
               <FormItem>
                 <FormControl>
                   <Controller
-                    name="description" // Use Controller to manage the form state
+                    name="description"
                     control={form.control}
                     render={({ field }) => (
                       <ReactQuill
-                        value={field.value} // Use field.value for the current value
+                        value={field.value} 
                         onChange={(value) => {
-                          field.onChange(value); // Update form state
+                          field.onChange(value); 
                         }}
                         placeholder="e.g. 'This Course is about .'"
                         modules={modules}
@@ -120,7 +120,7 @@ const DescriptionForm = ({ slug, initialData, refetch }: TitleFormProps) => {
               </FormItem>
             )} />
             <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">Save</Button>
+              <Button disabled={!isValid || isSubmitting} loading={isLoading} type="submit">Save</Button>
             </div>
           </form>
         </Form>

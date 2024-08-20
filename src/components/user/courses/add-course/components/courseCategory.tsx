@@ -11,9 +11,12 @@ import {
   FormField,
   FormItem,
   FormMessage,
+  FormLabel,
 } from "@/components/ui/form";
-import { useUpdateCourseMutation } from "@/lib/store/Service/User_Auth_Api";
-import { Input } from "@/components/ui/input";
+import {
+  useUpdateCourseMutation,
+  useGetCategoryQuery,
+} from "@/lib/store/Service/User_Auth_Api";
 import { Button } from "@/components/ui/button";
 import { getAccessToken } from "@/actions/gettoken";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
@@ -33,41 +36,57 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+interface Category {
+  id: number; // ID of the category
+  name: string; // Name of the category
+  categoryslug: string;
+  created_at: string;
+  updated_at: string;
+}
+
 interface TitleFormProps {
   slug: string;
   initialData: {
-    category: string;
+    category: number; // Store the ID of the selected category
   };
   refetch: any;
+  accessToken: string | null;
 }
 
 const formSchema = z.object({
-  category: z.string().min(1, {
-    message: "Title is required",
+  category: z.number().min(1, {
+    message: "Category is required",
   }),
 });
 
-const CourseCategory = ({ slug, initialData, refetch }: TitleFormProps) => {
+const CourseCategory = ({
+  slug,
+  initialData,
+  refetch,
+  accessToken,
+}: TitleFormProps) => {
   const [isEditing, setisEditing] = useState(false);
-  const [updateTitle, { isLoading }] = useUpdateCourseMutation();
+  const [updateTitle, { isLoading }] = useUpdateCourseMutation({});
+  const { data } = useGetCategoryQuery({ accessToken });
+  const frameworks: Category[] = data || [];
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData,
   });
   const { isSubmitting, isValid } = form.formState;
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+
   const onSubmit = async (value: z.infer<typeof formSchema>) => {
     const accessToken = await getAccessToken();
     const res = await updateTitle({ slug, value, accessToken });
     if (res?.data) {
-      toast.success("title updated");
+      toast.success("Title updated");
       refetch();
       setisEditing(false);
     } else if (res.error) {
       toast.error("Failed to update title");
     }
   };
+
   return (
     <div className="mt-6 dark:bg-neutral-900 rounded-md p-2 px-4">
       <div className="font-medium flex items-center justify-between">
@@ -77,79 +96,56 @@ const CourseCategory = ({ slug, initialData, refetch }: TitleFormProps) => {
           onClick={() => setisEditing(!isEditing)}
           className="p-2 gap-1"
         >
-          {isEditing ? (
-            "Cancel"
-          ) : (
-            <>
-              <LuPencilLine size={16} /> Edit title
-            </>
-          )}
+          {isEditing ? "Cancel" : <><LuPencilLine size={16} /> Edit title</>}
         </Button>
       </div>
       {!isEditing ? (
-        <>
-          <p className="text-small mt-1">{initialData?.category}</p>
-        </>
+        <p className={`text-small mt-1 ${initialData?.category ? "" : "text-slate-500 italic"}`}>
+          {frameworks.find(framework => framework.id === initialData.category)?.name || "No Category"}
+        </p>
       ) : (
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 mt-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
             <FormField
               control={form.control}
               name="category"
               render={({ field }) => (
                 <FormItem>
+                  {/* <FormLabel>Category</FormLabel> */}
                   <FormControl>
-                    {/* <Input
-                      disabled={isSubmitting}
-                      placeholder="e.g. 'Advanced Data'"
-                      {...field}
-                    /> */}
-                    <Popover open={open} onOpenChange={setOpen}>
+                    <Popover>
                       <PopoverTrigger asChild>
                         <Button
                           variant="secondary"
                           role="combobox"
-                          aria-expanded={open}
+                          aria-expanded={true}
                           className="w-full justify-between"
                         >
-                          {value
-                            ? frameworks.find(
-                                (framework) => framework.value === value
-                              )?.label
-                            : "Select framework..."}
+                          {field.value
+                            ? frameworks.find(framework => framework.id === field.value)?.name
+                            : "Select Category..."}
                           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-full p-0">
                         <Command>
-                          <CommandInput
-                            placeholder="Search framework..."
-                            className="h-9"
-                          />
+                          <CommandInput placeholder="Search Category..." className="h-9" />
                           <CommandList>
-                            <CommandEmpty>No framework found.</CommandEmpty>
+                            <CommandEmpty>No category found.</CommandEmpty>
                             <CommandGroup>
                               {frameworks.map((framework) => (
                                 <CommandItem
-                                  key={framework.value}
-                                  value={framework.value}
+                                  key={framework.id}
+                                  value={String(framework.id)} // Convert ID to string for the value
                                   onSelect={(currentValue) => {
-                                    setValue(
-                                      currentValue === value ? "" : currentValue
-                                    );
-                                    setOpen(false);
+                                    field.onChange(Number(currentValue)); // Convert back to number for form state
                                   }}
                                 >
-                                  {framework.label}
+                                  {framework.name} {/* Display the name */}
                                   <CheckIcon
                                     className={cn(
                                       "ml-auto h-4 w-4",
-                                      value === framework.value
-                                        ? "opacity-100"
-                                        : "opacity-0"
+                                      field.value === framework.id ? "opacity-100" : "opacity-0"
                                     )}
                                   />
                                 </CommandItem>
@@ -165,7 +161,7 @@ const CourseCategory = ({ slug, initialData, refetch }: TitleFormProps) => {
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">
+              <Button disabled={!isValid || isSubmitting} loading={isLoading} type="submit">
                 Save
               </Button>
             </div>
@@ -177,27 +173,3 @@ const CourseCategory = ({ slug, initialData, refetch }: TitleFormProps) => {
 };
 
 export default CourseCategory;
-
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
-
