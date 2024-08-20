@@ -24,14 +24,23 @@ export const userAuthapi = createApi({
       }),
     }), 
     updateCourse: builder.mutation({
-      query: ({slug, value, accessToken}) => ({
-        url: `/api/courses/${slug ? `${slug}/` :""}`,
+      query: ({slug, value, accessToken, attach}) => ({
+        url: `/api/courses/${slug ? `${slug}/` :""}${attach ? `?attachments=attachments` : ''}`,
         method: "PATCH",
         body: value,
         headers: {
           authorization: `Bearer ${accessToken}`,
         },
       }),
+    }),
+    deleteAttachment: builder.mutation({
+      query: ({id, accessToken}) => ({
+        url: `/api/attachment/${id ? `${id}/` : ''}`,
+        method: "DELETE",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),      
     }), 
     createCategory: builder.mutation({
       query: ({data, accessToken}) => ({
@@ -69,6 +78,7 @@ export const {
   useCreateCourseMutation,
   useGetCourseQuery,
   useUpdateCourseMutation,
+  useDeleteAttachmentMutation,
   useGetCategoryQuery,
   useUpdateCategoryMutation,
 } = userAuthapi;

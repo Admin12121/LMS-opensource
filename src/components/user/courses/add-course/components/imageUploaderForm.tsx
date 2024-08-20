@@ -96,7 +96,7 @@ const ImageUploaderForm = ({ slug, initialData, refetch }: TitleFormProps) => {
       <div className="bg-neutral-800 w-full overflow-hidden h-60 my-1 cursor-pointer rounded-md flex items-center justify-center" {...getRootProps()}>
         <input {...getInputProps()} />
         {uploading ? <SpinnerLoader /> : (imageUrl && !isEditing ? (
-          <Image src={imageUrl} alt={slug} quality={100} width="400" height="300" className="w-full h-full object-cover" />
+          <Image src={imageUrl} alt={slug} quality={100} width="400" height="300" className="w-full h-full object-cover" priority/>
         ) : (
           <FaImage size={34} />
         ))}
