@@ -24,8 +24,8 @@ export const userAuthapi = createApi({
       }),
     }), 
     updateCourse: builder.mutation({
-      query: ({slug, value, accessToken, attach}) => ({
-        url: `/api/courses/${slug ? `${slug}/` :""}${attach ? `?attachments=attachments` : ''}`,
+      query: ({slug, value, accessToken, attach, chapters}) => ({
+        url: `/api/courses/${slug ? `${slug}/` :""}${attach ? `?attachments=attachments` : ''}${chapters ? `?chapters=chapters` : ''}`,
         method: "PATCH",
         body: value,
         headers: {
@@ -71,6 +71,25 @@ export const userAuthapi = createApi({
         },
       }),
     }), 
+    updateChapter: builder.mutation({
+      query: ({slug, value, accessToken, normal}) => ({
+        url: `/api/chapter/${slug ? `${slug}/` :""}${normal ? `update/?slug=${slug}` : ''}`,
+        method: "PATCH",
+        body: value,
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }), 
+    getChapter: builder.query({
+      query: ({params, accessToken}) => ({
+        url: `/api/chapter/${params ? `${params}/` :""}`,
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }), 
   }),
 });
 
@@ -81,4 +100,6 @@ export const {
   useDeleteAttachmentMutation,
   useGetCategoryQuery,
   useUpdateCategoryMutation,
+  useUpdateChapterMutation,
+  useGetChapterQuery,
 } = userAuthapi;

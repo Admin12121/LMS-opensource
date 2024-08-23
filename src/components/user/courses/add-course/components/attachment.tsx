@@ -147,7 +147,7 @@ const Attachment = ({ slug, initialData, refetch }: AttachmentProps) => {
             return (
               <div
                 key={attachment.id}
-                className="flex items-center justify-between rounded-md gap-2 p-3 bg-zinc-800"
+                className="flex items-center justify-between rounded-md gap-2 p-2 bg-zinc-800"
               >
                 <span className="flex gap-2">
                   <CiFileOn size={22} strokeWidth={1} />

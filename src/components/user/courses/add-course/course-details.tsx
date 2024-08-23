@@ -13,6 +13,7 @@ import { CiFileOn } from "react-icons/ci";
 import PriceForm from "./components/priceForm";
 import Attachment from "./components/attachment";
 import FlickeringGrid  from "@/components/ui/bg-animation"
+import ChapterForm from "./components/chapters/chapterForm";
 const CourseDetails = ({
   params,
   accessToken,
@@ -58,8 +59,11 @@ const CourseDetails = ({
           <div className="space-y-6">
             <div>
               <div className="flex items-center gap-x-2">
-                <FaList size={22} />
+                <FaList size={20} />
                 <h2 className="text-xl">Course chapters</h2>
+              </div>
+              <div>
+              <ChapterForm slug={params} initialData={data} refetch={refetch}/>
               </div>
             </div>
             <div>
