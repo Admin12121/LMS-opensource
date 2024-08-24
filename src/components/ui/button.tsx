@@ -40,6 +40,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   loading?: boolean;
+  icon?: React.ReactNode;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -51,6 +52,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       asChild = false,
       children,
       loading = false,
+      icon,
       ...props
     },
     ref
@@ -62,6 +64,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
+        {icon ? (!loading ? icon : <Spinner color="default" size="sm"/>) : ""}
         {loading ? <Spinner color="default" size="sm"/> : children}
       </Comp>
     );

@@ -36,7 +36,7 @@ export function UserNav({ isCollapsed }: AccountSwitcherProps) {
                 isCollapsed && "h-8 w-8 p-0"
               )}
             >
-              <AvatarImage src="/avatars/01.png" />
+              <AvatarImage src="/logo.svg" />
               <AvatarFallback className="bg-transparent">OM</AvatarFallback>
             </Avatar>
             <div

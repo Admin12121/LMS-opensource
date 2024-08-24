@@ -1,5 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+interface VideoUrlResponse {
+  video_url: string;
+}
+
 export const userAuthapi = createApi({
   reducerPath: "userAuthapi",
   baseQuery: fetchBaseQuery({ baseUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}` }),
@@ -90,6 +94,30 @@ export const userAuthapi = createApi({
         },
       }),
     }), 
+    videoUploader: builder.mutation({
+      query: ({params, value, accessToken}) => ({
+        url: `/api/chapters/${params ? `${params}/` :""}/upload-video/`,
+        method: "POST",
+        body: value,
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }), 
+    getEncryptedVideoUrl: builder.mutation({
+      query: ({ slug, accessToken }) => ({
+        url: `/api/chapters/${slug}/video/`,
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+      transformResponse: (response: VideoUrlResponse) => {
+        const videoUrl = response.video_url;
+        const encryptedUrl = btoa(videoUrl); 
+        return { encryptedUrl };
+      },
+    }),
   }),
 });
 
@@ -102,4 +130,6 @@ export const {
   useUpdateCategoryMutation,
   useUpdateChapterMutation,
   useGetChapterQuery,
+  useVideoUploaderMutation,
+  useGetEncryptedVideoUrlMutation,
 } = userAuthapi;

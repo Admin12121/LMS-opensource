@@ -32,6 +32,7 @@ const CourseDetails = ({
           <SpinnerLoader />
         </div>
       ) : error ? <FlickeringGrid color="#60A5FA" /> : (
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 overflow-hidden overflow-y-auto">
           <div>
             <div className="flex items-center gap-x-2">

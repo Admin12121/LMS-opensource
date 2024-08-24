@@ -5,8 +5,14 @@ import { useGetChapterQuery } from "@/lib/store/Service/User_Auth_Api";
 import FlickeringGrid from "@/components/ui/bg-animation";
 import { RxDashboard } from "react-icons/rx";
 import ChapterTitleForm from "./components/chapterTitleForm";
-import dynamic from 'next/dynamic';
-const DescriptionForm = dynamic(() => import('./components/descriptionForm'), { ssr: false })
+import dynamic from "next/dynamic";
+import ChapterSettingForm from "./components/ChapterSettings";
+import { IoVideocam } from "react-icons/io5";
+import { IoSettingsOutline } from "react-icons/io5";
+import VideoUploaderForm from "./components/VideoUploaderForm";
+const DescriptionForm = dynamic(() => import("./components/descriptionForm"), {
+  ssr: false,
+});
 
 const Chapter = ({
   params,
@@ -34,8 +40,32 @@ const Chapter = ({
               <RxDashboard size={22} />
               <h2 className="text-xl">Customize your chapter</h2>
             </div>
-            <ChapterTitleForm slug={params} initialData={data} refetch={refetch} />
-            <DescriptionForm slug={params} initialData={data} refetch={refetch} />
+            <ChapterTitleForm
+              slug={params}
+              initialData={data}
+              refetch={refetch}
+            />
+            <DescriptionForm
+              slug={params}
+              initialData={data}
+              refetch={refetch}
+            />
+          </div>
+          <div>
+            <div className="flex items-center gap-x-2 mt-2">
+              <IoSettingsOutline size={22} />
+              <h2 className="text-xl">Chapter Settings</h2>
+            </div>
+            <ChapterSettingForm slug={params} initialData={data} refetch={refetch} />
+          </div>
+          <div>
+            <div className="flex items-center gap-x-2 mt-2">
+              <IoVideocam size={22} />
+              <h2 className="text-xl">Add a Video</h2>
+            </div>
+            <div>
+              <VideoUploaderForm slug={params} initialData={data} refetch={refetch} />
+            </div>
           </div>
         </div>
       )}
