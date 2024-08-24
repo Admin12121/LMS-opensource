@@ -10,6 +10,7 @@ import ChapterSettingForm from "./components/ChapterSettings";
 import { IoVideocam } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import VideoUploaderForm from "./components/VideoUploaderForm";
+import { DeleteChapter } from "./components/deleteChapter";
 const DescriptionForm = dynamic(() => import("./components/descriptionForm"), {
   ssr: false,
 });
@@ -36,9 +37,12 @@ const Chapter = ({
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 overflow-hidden overflow-y-auto">
           <div>
-            <div className="flex items-center gap-x-2">
-              <RxDashboard size={22} />
-              <h2 className="text-xl">Customize your chapter</h2>
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-x-2">
+                <RxDashboard size={22} />
+                <h2 className="text-xl">Customize your chapter</h2>  
+              </span>             
+              <DeleteChapter className="md:hidden"/>
             </div>
             <ChapterTitleForm
               slug={params}
@@ -52,11 +56,18 @@ const Chapter = ({
             />
           </div>
           <div>
-            <div className="flex items-center gap-x-2 mt-2">
-              <IoSettingsOutline size={22} />
-              <h2 className="text-xl">Chapter Settings</h2>
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-x-2">
+                <IoSettingsOutline size={22} />
+                <h2 className="text-xl">Chapter Settings</h2>
+              </span>
+              <DeleteChapter className="md:flex hidden"/>
             </div>
-            <ChapterSettingForm slug={params} initialData={data} refetch={refetch} />
+            <ChapterSettingForm
+              slug={params}
+              initialData={data}
+              refetch={refetch}
+            />
           </div>
           <div>
             <div className="flex items-center gap-x-2 mt-2">
@@ -64,7 +75,11 @@ const Chapter = ({
               <h2 className="text-xl">Add a Video</h2>
             </div>
             <div>
-              <VideoUploaderForm slug={params} initialData={data} refetch={refetch} />
+              <VideoUploaderForm
+                slug={params}
+                initialData={data}
+                refetch={refetch}
+              />
             </div>
           </div>
         </div>

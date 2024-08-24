@@ -15,7 +15,7 @@ export function ContentLayout({
     <div className={classname ? classname : ""}>
       {/* <Navbar title={title} /> */}
       <Menu />
-      <div className="h-[calc(100vh_-_40px)] m-0 p-0 flex flex-col w-full">
+      <div className="h-[calc(100vh_-_25px)] m-0 p-0 flex flex-col w-full">
         {children}
       </div>
     </div>

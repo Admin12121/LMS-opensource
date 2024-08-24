@@ -9,8 +9,7 @@ import { useUpdateChapterMutation } from "@/lib/store/Service/User_Auth_Api";
 import { getAccessToken } from "@/actions/gettoken";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
-import { MdDeleteOutline } from "react-icons/md";
+
 
 interface ChapterSettingFormProps {
   slug: string;
@@ -108,16 +107,6 @@ const ChapterSettingForm = ({
                 disabled={isLoading}
               />
             )}
-          />
-        </div>
-      </div>
-      <div className="font-medium flex items-center justify-between">
-        Delete
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="secondary"
-            disabled={isLoading}
-            icon={<MdDeleteOutline size={20} />}
           />
         </div>
       </div>
