@@ -109,6 +109,7 @@ const ChapterSettingForm = ({
                   <TooltipTrigger asChild>
                     <Switch
                       id="isPublished"
+                      className="dark:bg-white"
                       checked={field.value}
                       onCheckedChange={(checked) => {
                         field.onChange(checked);
@@ -117,7 +118,7 @@ const ChapterSettingForm = ({
                       disabled={isLoading || !completionText}
                     />
                   </TooltipTrigger>
-                  <TooltipContent side="left">
+                  <TooltipContent side="left" className={`${completionText ? "hidden" : ""}`}>
                       {completionText ? "" : <p>Complete all fields</p>}
                   </TooltipContent>
                 </Tooltip>

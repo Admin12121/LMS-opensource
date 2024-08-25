@@ -37,6 +37,15 @@ export const userAuthapi = createApi({
         },
       }),
     }),
+    deleteCourse: builder.mutation({
+      query: ({slug, accessToken}) => ({
+        url: `/api/courses/${slug ? `${slug}/` :""}`,
+        method: "DELETE",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }),  
     deleteAttachment: builder.mutation({
       query: ({id, accessToken}) => ({
         url: `/api/attachment/${id ? `${id}/` : ''}`,
@@ -64,7 +73,7 @@ export const userAuthapi = createApi({
           authorization: `Bearer ${accessToken}`,
         },
       }),
-    }), 
+    }),   
     updateCategory: builder.mutation({
       query: ({slug, value, accessToken}) => ({
         url: `/api/category/${slug ? `${slug}/` :""}`,
@@ -134,6 +143,7 @@ export const {
   useCreateCourseMutation,
   useGetCourseQuery,
   useUpdateCourseMutation,
+  useDeleteCourseMutation,
   useDeleteAttachmentMutation,
   useGetCategoryQuery,
   useUpdateCategoryMutation,

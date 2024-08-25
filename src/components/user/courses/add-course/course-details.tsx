@@ -15,7 +15,17 @@ import Attachment from "./components/attachment";
 import FlickeringGrid from "@/components/ui/bg-animation";
 import ChapterForm from "./components/chapters/chapterForm";
 import dynamic from "next/dynamic";
-const Loader = dynamic(() => import("@/components/auth/activateaccount/loader"), {loading: () => <span className='w-full h-[150px] flex items-center justify-center'><SpinnerLoader/></span> });
+import { Publish } from "./components/publish";
+const Loader = dynamic(
+  () => import("@/components/auth/activateaccount/loader"),
+  {
+    loading: () => (
+      <span className="w-full h-[150px] flex items-center justify-center">
+        <SpinnerLoader />
+      </span>
+    ),
+  }
+);
 const CourseDetails = ({
   params,
   accessToken,
@@ -27,8 +37,40 @@ const CourseDetails = ({
     params,
     accessToken,
   });
-  const errorMessage = error && "data" in error ? (error.data as { detail?: string }).detail : "An error occurred";
-    
+
+  const isPopulated = (field: any) => {
+    return (
+      field !== null &&
+      field !== undefined &&
+      (typeof field === "string" ? field.trim() !== "" : true)
+    );
+  };
+
+  const requiredFields = [
+    data?.title,
+    data?.description,
+    data?.image,
+    data?.category,
+  ];
+
+  const hasPublishedChapter = data?.chapters?.some(
+    (chapter: any) => chapter.isPublished
+  );
+
+  const completedFields = requiredFields.filter(isPopulated).length;
+  const totalFields = requiredFields.length + 1; // +1 for the published chapter check
+
+  const allFieldsCompleted =
+    completedFields === totalFields - 1 && hasPublishedChapter;
+  const completionText = `(${
+    completedFields + (hasPublishedChapter ? 1 : 0)
+  } / ${totalFields})`;
+
+  const errorMessage =
+    error && "data" in error
+      ? (error.data as { detail?: string }).detail
+      : "An error occurred";
+
   return (
     <>
       {isLoading ? (
@@ -45,6 +87,17 @@ const CourseDetails = ({
         </div>
       ) : (
         <>
+          <div className="flex items-center gap-x-2 mt-4 justify-between">
+            <span className="text-sm text-slate-700">
+              Complete all fields {completionText}
+            </span>
+            <Publish
+              slug={params}
+              initialData={data}
+              refetch={refetch}
+              allFieldsCompleted={allFieldsCompleted}
+            />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8  overflow-hidden overflow-y-auto">
             <div>
               <div className="flex items-center gap-x-2">
