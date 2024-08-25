@@ -56,8 +56,8 @@ export default function AddCourse() {
           <span>
             <CardTitle>Name your course</CardTitle>
             <CardDescription>
-              What would you like to name your course? Don't worry, you can
-              always change this later.
+                What would you like to name your course? Don&apos;t worry, you can
+                always change this later.
             </CardDescription>
           </span>
           <FormField
