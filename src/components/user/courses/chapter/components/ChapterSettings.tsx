@@ -9,7 +9,12 @@ import { useUpdateChapterMutation } from "@/lib/store/Service/User_Auth_Api";
 import { getAccessToken } from "@/actions/gettoken";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ChapterSettingFormProps {
   slug: string;
@@ -18,6 +23,7 @@ interface ChapterSettingFormProps {
     isPublished: boolean;
   };
   refetch: any;
+  completionText: boolean;
 }
 
 const formSchema = z.object({
@@ -29,6 +35,7 @@ const ChapterSettingForm = ({
   slug,
   initialData,
   refetch,
+  completionText,
 }: ChapterSettingFormProps) => {
   const [updateChapter, { isLoading }] = useUpdateChapterMutation();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -97,15 +104,24 @@ const ChapterSettingForm = ({
             name="isPublished"
             control={form.control}
             render={({ field }) => (
-              <Switch
-                id="isPublished"
-                checked={field.value}
-                onCheckedChange={(checked) => {
-                  field.onChange(checked);
-                  handleSwitchChange("isPublished", checked);
-                }}
-                disabled={isLoading}
-              />
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Switch
+                      id="isPublished"
+                      checked={field.value}
+                      onCheckedChange={(checked) => {
+                        field.onChange(checked);
+                        handleSwitchChange("isPublished", checked);
+                      }}
+                      disabled={isLoading || !completionText}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent side="left">
+                      {completionText ? "" : <p>Complete all fields</p>}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
           />
         </div>

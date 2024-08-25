@@ -14,6 +14,8 @@ import PriceForm from "./components/priceForm";
 import Attachment from "./components/attachment";
 import FlickeringGrid from "@/components/ui/bg-animation";
 import ChapterForm from "./components/chapters/chapterForm";
+import dynamic from "next/dynamic";
+const Loader = dynamic(() => import("@/components/auth/activateaccount/loader"), {loading: () => <span className='w-full h-[150px] flex items-center justify-center'><SpinnerLoader/></span> });
 const CourseDetails = ({
   params,
   accessToken,
@@ -25,6 +27,8 @@ const CourseDetails = ({
     params,
     accessToken,
   });
+  const errorMessage = error && "data" in error ? (error.data as { detail?: string }).detail : "An error occurred";
+    
   return (
     <>
       {isLoading ? (
@@ -32,7 +36,13 @@ const CourseDetails = ({
           <SpinnerLoader />
         </div>
       ) : error ? (
-        <FlickeringGrid color="#60A5FA" />
+        <div className="w-full h-full flex items-center justify-center relative top-2">
+          <FlickeringGrid color="#60A5FA" />
+          <div className="w-full h-full flex items-center justify-center absolute top-0 left-0 flex-col">
+            <Loader />
+            <p className="text-white text-sm">{errorMessage}</p>
+          </div>
+        </div>
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8  overflow-hidden overflow-y-auto">

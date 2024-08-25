@@ -17,17 +17,15 @@ import { Progress } from "@/components/ui/progress";
 
 interface VideoUploaderFormProps {
   slug: string;
-  initialData: {
-    video: string;
-  };
   refetch: any;
+  onVideoUrlChange: (url: string) => void;
 }
 
 const formSchema = z.object({
   video: z.instanceof(File).optional(),
 });
 
-const VideoUploaderForm = ({ slug, initialData, refetch }: VideoUploaderFormProps) => {
+const VideoUploaderForm = ({ slug, refetch, onVideoUrlChange }: VideoUploaderFormProps) => {
   const [isEditing, setisEditing] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,6 +44,7 @@ const VideoUploaderForm = ({ slug, initialData, refetch }: VideoUploaderFormProp
       try {
         const { data } = await getEncryptedVideoUrl({ slug, accessToken });
         setVideoUrl(atob(data?.encryptedUrl || "")); 
+        onVideoUrlChange(atob(data?.encryptedUrl || ""));
       } catch (error) {
         toast.error("Failed to load video");
       }
@@ -58,7 +57,7 @@ const VideoUploaderForm = ({ slug, initialData, refetch }: VideoUploaderFormProp
   const onDrop = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
-      if (file.size > 2000 * 1024 * 1024) {
+      if (file.size > 3000 * 1024 * 1024) {
         toast.error("File size exceeds 2GB");
         return;
       }
@@ -127,7 +126,6 @@ const VideoUploaderForm = ({ slug, initialData, refetch }: VideoUploaderFormProp
 
   const handleCancel = () => {
     setisEditing(!isEditing);
-    setVideoUrl(initialData.video);
     form.setValue("video", undefined);
   };
 
@@ -136,10 +134,10 @@ const VideoUploaderForm = ({ slug, initialData, refetch }: VideoUploaderFormProp
       <div className="font-medium flex items-center justify-between">
         Course Video
         <Button variant="ghost" onClick={handleCancel} className="p-2 gap-1">
-          {isEditing ? "Cancel" : initialData.video ? <><LuPencilLine size={16} /> Update Video</> : <><IoIosAddCircleOutline /> Add a Video</>}
+          {isEditing ? "Cancel" : videoUrl ? <><LuPencilLine size={16} /> Update Video</> : <><IoIosAddCircleOutline /> Add a Video</>}
         </Button>
       </div>
-      {videoUrl && !isEditing ?   <VideoPlayer src={videoUrl} /> : <div className="bg-neutral-800 w-full overflow-hidden h-60 my-1 cursor-pointer rounded-md flex items-center justify-center">
+      {videoUrl !== "undefined" && !isEditing ?  <VideoPlayer src={videoUrl} /> : <div className="bg-neutral-800 w-full overflow-hidden h-60 my-1 cursor-pointer rounded-md flex items-center justify-center">
         {isEditing ? (
           <div {...getRootProps()}>
             <input {...getInputProps()} />
@@ -158,7 +156,7 @@ const VideoUploaderForm = ({ slug, initialData, refetch }: VideoUploaderFormProp
           </div>
         )}
       </div>}
-      {isEditing && <p className="text-sm text-gray-500">Max file size: 2GB</p>}
+      { videoUrl == "undefined" || isEditing ? <p className="text-sm text-gray-500">Max file size: 3GB</p> : ""}
     </div>
   );
 };
