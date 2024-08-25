@@ -50,7 +50,7 @@ export default async function ChaptersPage({params}:{params:{course_slug:string,
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <Chapter accessToken={accessToken} params={params.chapterslug}/>
+      <Chapter accessToken={accessToken} params={params.chapterslug} course_slug={params.course_slug}/>
     </ContentLayout>
   );
 }

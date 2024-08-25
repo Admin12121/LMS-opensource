@@ -18,9 +18,11 @@ const DescriptionForm = dynamic(() => import("./components/descriptionForm"), {
 const Chapter = ({
   params,
   accessToken,
+  course_slug
 }: {
   params: string;
   accessToken: string | null;
+  course_slug: string | null;
 }) => {
   const { data, isLoading, error, refetch } = useGetChapterQuery({
     params,
@@ -42,7 +44,7 @@ const Chapter = ({
                 <RxDashboard size={22} />
                 <h2 className="text-xl">Customize your chapter</h2>  
               </span>             
-              <DeleteChapter className="md:hidden"/>
+              <DeleteChapter className="md:hidden" params={params} course_slug={course_slug} />
             </div>
             <ChapterTitleForm
               slug={params}
@@ -61,7 +63,7 @@ const Chapter = ({
                 <IoSettingsOutline size={22} />
                 <h2 className="text-xl">Chapter Settings</h2>
               </span>
-              <DeleteChapter className="md:flex hidden"/>
+              <DeleteChapter className="md:flex hidden" params={params} course_slug={course_slug} />
             </div>
             <ChapterSettingForm
               slug={params}

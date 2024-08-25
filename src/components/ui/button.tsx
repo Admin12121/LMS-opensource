@@ -64,8 +64,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {icon ? (!loading ? icon : <Spinner color="default" size="sm"/>) : ""}
-        {loading ? <Spinner color="default" size="sm"/> : children}
+        <>
+          {icon ? (!loading ? icon : <Spinner color="default" size="sm"/>) : ""}
+          {loading ? <Spinner color="default" size="sm"/> : children}
+        </>
       </Comp>
     );
   }

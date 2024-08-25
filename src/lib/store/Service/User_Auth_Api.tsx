@@ -118,6 +118,15 @@ export const userAuthapi = createApi({
         return { encryptedUrl };
       },
     }),
+    deleteChapter: builder.mutation({
+      query: ({slug, accessToken}) => ({
+        url: `/api/chapter/${slug ? `${slug}/` :""}`,
+        method: "DELETE",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }), 
   }),
 });
 
@@ -132,4 +141,5 @@ export const {
   useGetChapterQuery,
   useVideoUploaderMutation,
   useGetEncryptedVideoUrlMutation,
+  useDeleteChapterMutation,
 } = userAuthapi;
