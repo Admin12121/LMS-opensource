@@ -24,19 +24,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
+import { useGetCourseListQuery } from "@/lib/store/Service/User_Auth_Api"
 import { DataTablePagination } from "./data-table-pagination"
 import { DataTableToolbar } from "./data-table-toolbar"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  accessToken: string | null
 }
 
 export function DataTable<TData, TValue>({
   columns,
-  data,
+  accessToken
 }: DataTableProps<TData, TValue>) {
+  const { data: courses, isLoading, error } = useGetCourseListQuery({accessToken});
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
@@ -46,7 +47,7 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([])
 
   const table = useReactTable({
-    data,
+    data: courses || [],
     columns,
     state: {
       sorting,
@@ -66,6 +67,9 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   })
+
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Error loading data</div>
 
   return (
     <div className="space-y-4">

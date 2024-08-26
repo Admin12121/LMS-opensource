@@ -8,6 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
+import { getAccessToken } from "@/actions/gettoken";
 // import TaskPage  from "@/components/table/tablewrapper";
 import dynamic from 'next/dynamic';
 
@@ -16,7 +17,8 @@ const TaskPage = dynamic(() => import('@/components/table/tablewrapper'), {
   ssr: true,
 });
 
-export default function CategoriesPage() {
+export default async function CategoriesPage() {
+  const accessToken = await getAccessToken()
   return (
     <ContentLayout title="Categories" classname="pt-2">
       <Breadcrumb>
@@ -38,7 +40,7 @@ export default function CategoriesPage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <TaskPage />
+      <TaskPage accessToken={accessToken}/>
     </ContentLayout>
   );
 }

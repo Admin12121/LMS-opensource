@@ -8,6 +8,15 @@ export const userAuthapi = createApi({
   reducerPath: "userAuthapi",
   baseQuery: fetchBaseQuery({ baseUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}` }),
   endpoints: (builder) => ({
+    getCourseList: builder.query({
+      query: ({ accessToken}) => ({
+        url: `/api/courses/`,
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }),
     createCourse: builder.mutation({
       query: ({data, accessToken}) => ({
         url: "/api/courses/",
@@ -140,6 +149,7 @@ export const userAuthapi = createApi({
 });
 
 export const {
+  useGetCourseListQuery,
   useCreateCourseMutation,
   useGetCourseQuery,
   useUpdateCourseMutation,

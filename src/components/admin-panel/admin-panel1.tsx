@@ -110,11 +110,11 @@ export function AdminPanel1({
             { <div className=" p-2">
               <form>
                 <div className={`relative dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white rounded-lg ${isCollapsed ? "w-[36px] h-[36px]" : "w-full"}`}>
-                {isCollapsed ? <></> : <> <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search"
-                    className="pl-8 border-0 focus:outline-none focus-visible:ring-0"
-                  /></>}
+                  {isCollapsed ? <></> : <> <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search"
+                      className="pl-8 border-0 focus:outline-none focus-visible:ring-0"
+                    /></>}
                   <Kbd
                     keys={["command"]}
                     className="rounded-md absolute right-2 top-[6px] shadow-lg"
@@ -137,14 +137,14 @@ export function AdminPanel1({
                   label: "9",
                   href: "/browser",
                   icon: Compass,
-                  variant: pathname === "/browser" ? "default" : "ghost",
+                  variant: pathname.startsWith("/browser") ? "default" : "ghost",
                 },
                 {
                   title: "Courses",
                   label: "",
                   icon: List,
                   href: "/courses",
-                  variant: pathname === "/courses" ? "default" : "ghost",
+                  variant: pathname.startsWith("/courses") ? "default" : "ghost",
                   prefetch: true,
                 },
                 {
@@ -152,21 +152,21 @@ export function AdminPanel1({
                   label: "",
                   icon: UserRound,
                   href: "/users",
-                  variant: pathname === "/users" ? "default" : "ghost",
+                  variant: pathname.startsWith("/users") ? "default" : "ghost",
                 },
                 {
                   title: "Analytics",
                   label: "",
                   icon: ChartSpline,
                   href: "/analytics",
-                  variant: pathname === "/analytics" ? "default" : "ghost",
+                  variant: pathname.startsWith("/analytics") ? "default" : "ghost",
                 },
                 {
                   title: "Trash",
                   label: "",
                   icon: Trash2,
                   href: "/trash",
-                  variant: pathname === "/trash" ? "default" : "ghost",
+                  variant: pathname.startsWith("/trash")? "default" : "ghost",
                 },
               ]}
             />
