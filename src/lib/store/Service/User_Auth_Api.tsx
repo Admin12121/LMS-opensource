@@ -4,10 +4,27 @@ interface VideoUrlResponse {
   video_url: string;
 }
 
+const buildQueryParams = (params: Record<string, string | number | undefined>) => {
+  const queryParams = Object.entries(params)
+  .filter(([_, value]) => value !== undefined && value !== null && value !== "")
+    .map(([key, value]) => `${key}=${value}`)
+    .join("&");
+  return queryParams ? `?${queryParams}` : "";
+};
+
 export const userAuthapi = createApi({
   reducerPath: "userAuthapi",
   baseQuery: fetchBaseQuery({ baseUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}` }),
   endpoints: (builder) => ({
+    allUsers: builder.query({
+      query: ({accessToken, username, search, rowsperpage, page, exclude_by}) => ({
+        url: `api/accounts/admin-users/${username ? `by-username/${username}/` : ""}${buildQueryParams({ search, page_size: rowsperpage, page, exclude_by })}`,
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }),  
     getCourseList: builder.query({
       query: ({ accessToken}) => ({
         url: `/api/courses/`,
@@ -149,6 +166,7 @@ export const userAuthapi = createApi({
 });
 
 export const {
+  useAllUsersQuery,
   useGetCourseListQuery,
   useCreateCourseMutation,
   useGetCourseQuery,

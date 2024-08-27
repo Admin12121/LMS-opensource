@@ -1,7 +1,7 @@
 "use client";
 import { SpinnerLoader as Spinner} from "@/components/ui/spinner";
 import React, { useState, useEffect } from "react";
-import { useGetCourseListQuery } from "@/lib/store/Service/User_Auth_Api"
+import { useAllUsersQuery } from "@/lib/store/Service/User_Auth_Api"
 import UserTable from "./userTabel";
 
 const CourseTable = ({accessToken}:{accessToken:string}) => {
@@ -9,7 +9,7 @@ const CourseTable = ({accessToken}:{accessToken:string}) => {
   const [rowsperpage , setRowsPerPage] = useState<number|null>(null)
   const [page, setPage] = useState<number>(1);
   const [ exclude_by, SetExcludeBy] = useState<string>('');
-  const { data, isLoading, refetch, error } = useGetCourseListQuery({search,rowsperpage, page, exclude_by,accessToken});
+  const { data, isLoading, refetch, error } = useAllUsersQuery({search,rowsperpage, page, exclude_by,accessToken});
   useEffect(()=>{
     refetch()
   },[search, rowsperpage])

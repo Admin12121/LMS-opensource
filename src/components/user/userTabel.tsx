@@ -1,21 +1,33 @@
 import React, { useEffect } from "react";
-import {  Dropdown,  DropdownTrigger,  DropdownMenu,  DropdownSection,  DropdownItem} from "@nextui-org/dropdown";
 import {
-    Table,
-    TableHeader,
-    TableBody,
-    TableColumn,
-    TableRow,
-    TableCell,
-    SortDescriptor,
-    Selection,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@nextui-org/dropdown";
+import {
+  DropdownMenu as DropdownMenuNext,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableColumn,
+  TableRow,
+  TableCell,
+  SortDescriptor,
+  Selection,
 } from "@nextui-org/table";
-import {Badge as Chip} from "@/components/ui/badge"
-import {User} from "@nextui-org/user";
-import {Pagination} from "@nextui-org/pagination";
-import {Input} from "@nextui-org/input";
+import { Badge as Chip } from "@/components/ui/badge";
+import { User } from "@nextui-org/user";
+import { Pagination } from "@nextui-org/pagination";
+import { Input } from "@nextui-org/input";
 import { Button } from "@/components/ui/button";
-import { SpinnerLoader as Spinner} from "@/components/ui/spinner";
+import { SpinnerLoader as Spinner } from "@/components/ui/spinner";
 import { IoIosClose } from "react-icons/io";
 import { IoReload } from "react-icons/io5";
 import { HiDotsHorizontal as VerticalDotsIcon } from "react-icons/hi";
@@ -23,32 +35,22 @@ import { IoIosArrowDown as ChevronDownIcon } from "react-icons/io";
 import { CiSearch as SearchIcon } from "react-icons/ci";
 import { statusOptions } from "./courses/AdvanceTable/advanceddata";
 import { useRouter } from "next/navigation";
-
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
 interface Users {
   id: number;
-  image: string,
-  title:string,
-  user: any,
-  password: string;
   email: string;
   profile: string | null;
-  first_name: string;
-  last_name: string;
-  username: string | null;
+  username: string;
   phone: string;
   dob: string | null;
   gender: string | null;
-  is_otp_verified: boolean;
-  tc: boolean;
-  is_blocked: boolean;
-  is_active: boolean;
-  is_admin: boolean;
-  is_superuser: boolean;
+  state: string;
+  role: string;
+  provider: string;
   created_at: string;
   updated_at: string;
   last_login: string | null;
-  otp_device: number | null;
 }
 
 interface ApiResponse {
@@ -61,19 +63,24 @@ interface ApiResponse {
   results: Users[];
 }
 
-
 const columns = [
   { name: "ID", uid: "id", sortable: true },
   { name: "NAME", uid: "name", sortable: true },
   { name: "PHONE", uid: "phone", sortable: true },
   { name: "ROLE", uid: "role", sortable: true },
-  { name: "SOCIAL", uid: "social" },
+  { name: "SOCIAL", uid: "provider" },
   { name: "EMAIL", uid: "email" },
   { name: "STATUS", uid: "status", sortable: true },
   { name: "ACTIONS", uid: "actions" },
 ];
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "social", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = [
+  "name",
+  "role",
+  "provider",
+  "status",
+  "actions",
+];
 
 export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -181,7 +188,7 @@ export default function UserTable({
                 radius: "full",
                 size: "sm",
                 src: user?.profile as string,
-                name: `${user.first_name.slice(0, 1)}`,
+                name: `${user.username.slice(0, 1)}`,
                 // icon: `${(<AvatarIcon />)}`,
                 classNames: {
                   base: "bg-gradient-to-br from-[#FFB457] to-[#FF705B] cursor-pointer",
@@ -193,7 +200,7 @@ export default function UserTable({
                 name: "cursor-pointer",
               }}
               description={user.email}
-              name={`${user.first_name} ${user.last_name}`}
+              name={`${user.username}`}
             >
               {user.email}
             </User>
@@ -202,59 +209,53 @@ export default function UserTable({
       case "role":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">
-              {user.is_admin ? "Admin" : "User"}
-            </p>
+            <p className="text-bold text-small capitalize">{user.role}</p>
           </div>
         );
       case "status":
         return (
           <Chip
+            variant="secondary"
             className="capitalize border-none gap-1 text-default-600"
-            color={
-              user.is_active
-                ? user.is_blocked
-                  ? "danger"
-                  : "success"
-                : "warning"
-            }
-            // size="sm"
-            // variant="dot"
           >
-            {user.is_active
-              ? user.is_blocked
-                ? "blocked"
-                : "active"
-              : "inactive"}
+            {user.state}
           </Chip>
         );
       case "actions":
         return (
-          <div className="relative flex items-center gap-2">
-            <Dropdown className="bg-background border-1 border-default-100 w-[100px] min-w-[100px] max-w-[100px] p-0 rounded-[12px]">
-              <DropdownTrigger>
+          <div className="relative flex items-center justify-center gap-2">
+            <DropdownMenuNext>
+              <DropdownMenuTrigger asChild>
                 <Button
-                //   isIconOnly
-                //   radius="sm"
-                  size="sm"
-                  variant="secondary"
-                  className="w-[25px]"
+                  variant="ghost"
+                  className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
                 >
-                  <VerticalDotsIcon className="text-default-400" size={20} />
+                  <DotsHorizontalIcon className="h-4 w-4" />
                 </Button>
-              </DropdownTrigger>
-              <DropdownMenu className="w-[100px] min-w-[100px] max-w-[100px]">
-                <DropdownItem
-                  onClick={() => router.push(`/admin/users/${user.username}`)}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[160px]">
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setUser(user);
+                  }}
+                >
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() =>
+                    router.push(`/courses/add-course/${user.username}`)
+                  }
                 >
                   View
-                </DropdownItem>
-                <DropdownItem onClick={()=>{ setUser(user)}}>Edit</DropdownItem>
-                <DropdownItem onClick={() => setDeleteModalId(user.id)}>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setDeleteModalId(user.id)}>
                   Delete
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+                  <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenuNext>
           </div>
         );
       default:
@@ -302,7 +303,7 @@ export default function UserTable({
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
-                //   endContent={<ChevronDownIcon className="text-small" />}
+                  endContent={<ChevronDownIcon className="text-small" />}
                   size="sm"
                   variant="secondary"
                 >
@@ -326,11 +327,7 @@ export default function UserTable({
             </Dropdown>
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
-                <Button
-                //   endContent={<ChevronDownIcon className="text-small" />}
-                  size="sm"
-                  variant="secondary"
-                >
+                <Button size="sm" variant="secondary" endContent={<ChevronDownIcon className="text-small" />}>
                   Columns
                 </Button>
               </DropdownTrigger>
@@ -351,7 +348,6 @@ export default function UserTable({
             </Dropdown>
             {/* <AddUser /> */}
             <Button
-            //   isIconOnly
               size="sm"
               variant="secondary"
               color="default"
@@ -454,7 +450,7 @@ export default function UserTable({
         onSortChange={setSortDescriptor}
       >
         <TableHeader columns={headerColumns}>
-          {(column:any) => (
+          {(column: any) => (
             <TableColumn
               key={column.uid}
               align={column.uid === "actions" ? "center" : "start"}
@@ -474,9 +470,9 @@ export default function UserTable({
             </span>
           }
         >
-          {(item:any) => (
+          {(item: any) => (
             <TableRow key={item.id}>
-              {(columnKey:any) => (
+              {(columnKey: any) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
             </TableRow>
