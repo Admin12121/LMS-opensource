@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Spinner } from "@nextui-org/spinner";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex gap-2 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -41,6 +41,7 @@ export interface ButtonProps
   asChild?: boolean;
   loading?: boolean;
   icon?: React.ReactNode;
+  endContent?: React.ReactNode;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -53,6 +54,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       loading = false,
       icon,
+      endContent,
       ...props
     },
     ref
@@ -67,6 +69,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         <>
           {icon ? (!loading ? icon : <Spinner color="default" size="sm"/>) : ""}
           {loading ? <Spinner color="default" size="sm"/> : children}
+          {endContent ? endContent : ""}
         </>
       </Comp>
     );

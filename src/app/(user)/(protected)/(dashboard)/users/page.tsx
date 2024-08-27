@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import PlaceholderContent from "@/components/demo/placeholder-content";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
 import {
   Breadcrumb,
@@ -10,8 +9,16 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
+import { getAccessToken } from "@/actions/gettoken";
+import dynamic from 'next/dynamic';
+const UserTable = dynamic(() => import('@/components/user/tabel'), {
+  loading: () => <p>Loading...</p>,
+  ssr: true,
+});
 
-export default function AccountPage() {
+
+export default async function AccountPage() {
+  const accessToken = await getAccessToken()
   return (
     <ContentLayout title="Account">
       <Breadcrumb>
@@ -33,7 +40,7 @@ export default function AccountPage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <PlaceholderContent />
+      {accessToken && <UserTable accessToken={accessToken}/>}
     </ContentLayout>
   );
 }
