@@ -1,6 +1,4 @@
 import Link from "next/link";
-
-import PlaceholderContent from "@/components/demo/placeholder-content";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
 import {
   Breadcrumb,
@@ -10,8 +8,17 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
+import { SpinnerLoader as Spinner} from "@/components/ui/spinner";
+import { getAccessToken } from "@/actions/gettoken";
+import dynamic from 'next/dynamic';
 
-export default function BrowserPage() {
+const Browser = dynamic(() => import('@/components/browser/browser'), {
+  loading: () => <span className="w-full h-full flex items-center justify-center"><Spinner/></span>,
+  ssr: true,
+});
+
+export default async function BrowserPage() {
+  const accessToken = await getAccessToken()
   return (
     <ContentLayout title="All Posts">
       <Breadcrumb>
@@ -33,7 +40,7 @@ export default function BrowserPage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <PlaceholderContent />
+      {accessToken && <Browser accessToken={accessToken}/>}
     </ContentLayout>
   );
 }

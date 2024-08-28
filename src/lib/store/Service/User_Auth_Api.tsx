@@ -25,9 +25,18 @@ export const userAuthapi = createApi({
         },
       }),
     }),  
+    getUserViewCourseList: builder.query({
+      query: ({ accessToken, search, rowsperpage, page, exclude_by}) => ({
+        url: `/api/course/${buildQueryParams({ search, page_size: rowsperpage, page, exclude_by })}`,
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }),
     getCourseList: builder.query({
-      query: ({ accessToken}) => ({
-        url: `/api/courses/`,
+      query: ({ accessToken, search, rowsperpage, page, exclude_by}) => ({
+        url: `/api/courses/${buildQueryParams({ search, page_size: rowsperpage, page, exclude_by })}`,
         method: "GET",
         headers: {
           authorization: `Bearer ${accessToken}`,
@@ -167,6 +176,7 @@ export const userAuthapi = createApi({
 
 export const {
   useAllUsersQuery,
+  useGetUserViewCourseListQuery,
   useGetCourseListQuery,
   useCreateCourseMutation,
   useGetCourseQuery,

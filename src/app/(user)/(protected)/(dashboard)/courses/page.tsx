@@ -8,11 +8,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
+import { SpinnerLoader as Spinner} from "@/components/ui/spinner";
 import { getAccessToken } from "@/actions/gettoken";
 import dynamic from 'next/dynamic';
 
 const CourseTable = dynamic(() => import('@/components/user/courses/tabel'), {
-  loading: () => <p>Loading...</p>,
+  loading: () => <span className="w-full h-full flex items-center justify-center"><Spinner/></span>,
   ssr: true,
 });
 

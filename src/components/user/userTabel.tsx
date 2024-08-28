@@ -128,7 +128,7 @@ export default function UserTable({
   const pages = Math.ceil(totalUsers / rowsPerPage);
   const [DeleteModalId, setDeleteModalId] = React.useState<number | null>(null);
   const [user, setUser] = React.useState<Users | null>(null);
-  console.log(DeleteModalId);
+
   useEffect(() => {
     if (data) {
       setProfile(data.results);
