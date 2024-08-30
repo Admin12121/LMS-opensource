@@ -17,51 +17,16 @@
 
 
 import React, { useState } from "react";
-// import Player from 'next-video/player';
-// import {SpinnerLoader} from "@/components/ui/spinner";
-
-// interface VideoProps {
-//   src: string;
-//   autoplay?: boolean;
-// }
-
-// export function VideoPlayer({ src }: VideoProps) {
-//   const [isBuffering, setIsBuffering] = useState(false);
-
-//   const handleWaiting = () => setIsBuffering(true);
-//   const handlePlaying = () => setIsBuffering(false);
-//   const handleSeeked = () => setIsBuffering(false);
-//   return (
-//     <div className="relative rounded-md">
-//       {isBuffering && (
-//         <div className="absolute z-50 inset-0 flex items-center justify-center bg-black bg-opacity-50">
-//           <SpinnerLoader />
-//         </div>
-//       )}
-//       <Player
-//         primaryColor="#fff"
-//         accentColor="#ffffff40"
-//         className="rounded-md"
-//         thumbnailTime={20}
-//         src={src}
-//         onWaiting={handleWaiting}
-//         onPlaying={handlePlaying}
-//         onSeeked={handleSeeked}
-//         controls
-//       />
-//     </div>
-//   );
-// }
-
 import Player from 'next-video/player';
 import { SpinnerLoader } from "@/components/ui/spinner";
 
 interface VideoProps {
   src: string;
   autoplay?: boolean;
+  poster?: string;
 }
 
-export function VideoPlayer({ src }: VideoProps) {
+export function VideoPlayer({ src, poster }: VideoProps) {
   const [isBuffering, setIsBuffering] = useState(false);
 
   const handleWaiting = () => {
@@ -74,27 +39,23 @@ export function VideoPlayer({ src }: VideoProps) {
     setIsBuffering(false);
   };
 
-  const handleSeek = (event) => {
+  const handleSeek = (event:any) => {
     console.log(`Seeking to: ${event.target.currentTime}`);
   };
 
   return (
     <div className="relative rounded-md">
-      {isBuffering && (
-        <div className="absolute z-50 inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <SpinnerLoader />
-        </div>
-      )}
       <Player
         primaryColor="#fff"
         accentColor="#ffffff40"
         className="rounded-md"
         thumbnailTime={20}
-        src={src}
+        poster={poster ? poster : ""}
+        src={`${src}?user_id=6`}
         onWaiting={handleWaiting}
         onPlaying={handlePlaying}
         onSeeking={handleSeek}  // Add an event listener for seeking
-        controls
+        controls  
       />
     </div>
   );
