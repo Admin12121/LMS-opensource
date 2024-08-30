@@ -47,7 +47,7 @@ interface Category {
 interface TitleFormProps {
   slug: string;
   initialData: {
-    category: number; // Store the ID of the selected category
+    category: any;
   };
   refetch: any;
   accessToken: string | null;
@@ -101,7 +101,7 @@ const CourseCategory = ({
       </div>
       {!isEditing ? (
         <p className={`text-small mt-1 ${initialData?.category ? "" : "text-slate-500 italic"}`}>
-          {frameworks.find(framework => framework.id === initialData.category)?.name || "No Category"}
+          {initialData.category?.name || "No Category"}
         </p>
       ) : (
         <Form {...form}>

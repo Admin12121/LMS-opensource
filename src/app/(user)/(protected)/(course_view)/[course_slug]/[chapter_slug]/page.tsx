@@ -8,19 +8,19 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
-import { SpinnerLoader as Spinner} from "@/components/ui/spinner";
 import dynamic from 'next/dynamic';
+import { SpinnerLoader as Spinner} from "@/components/ui/spinner";
 import { getAccessToken } from "@/actions/gettoken";
-const Chapter = dynamic(() => import('@/components/user/courses/chapter/chapter'), {
+const Chapter = dynamic(() => import('@/components/browser/[course_slug]/layout'), {
   loading: () => <span className="w-full h-full flex items-center justify-center"><Spinner/></span>,
   ssr: true,
 });
 
-export default async function ChaptersPage({params}:{params:{course_slug:string, chapterslug:string}}) {
-    const accessToken = await getAccessToken()
-    return (
-    <ContentLayout title="Chapter" classname="pt-2">
-        <Breadcrumb>
+export default async function NewPostPage({params}:{params:{course_slug:string, chapter_slug:string}}) {
+  const accessToken = await getAccessToken()
+  return (
+    <ContentLayout title="New Post">
+      <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
@@ -36,22 +36,16 @@ export default async function ChaptersPage({params}:{params:{course_slug:string,
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="/courses">Courses</Link>
+              <Link href="/browser">Browser</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href={`/courses/add-course/${params.course_slug}`}>Update Course</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Chapter</BreadcrumbPage>
+            <BreadcrumbPage>{params.course_slug}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <Chapter accessToken={accessToken} params={params.chapterslug} course_slug={params.course_slug}/>
+      {accessToken && <Chapter accessToken={accessToken} course_slug={params.course_slug} chapter_slug={params.chapter_slug}/>}
     </ContentLayout>
   );
 }

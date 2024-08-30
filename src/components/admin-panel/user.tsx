@@ -14,7 +14,7 @@ import { LogOut, UserRound, Settings } from "lucide-react";
 import { handleSignOut } from "@/actions/logoutaction";
 
 interface AccountSwitcherProps {
-  isCollapsed: boolean;
+  isCollapsed?: boolean;
 }
 
 export function UserNav({ isCollapsed }: AccountSwitcherProps) {

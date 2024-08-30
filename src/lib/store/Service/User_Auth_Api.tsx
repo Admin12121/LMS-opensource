@@ -26,13 +26,24 @@ export const userAuthapi = createApi({
       }),
     }),  
     getUserViewCourseList: builder.query({
-      query: ({ accessToken, search, rowsperpage, page, exclude_by}) => ({
-        url: `/api/course/${buildQueryParams({ search, page_size: rowsperpage, page, exclude_by })}`,
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      }),
+      query: ({ accessToken,slug, search, rowsperpage, page, exclude_by}) => {
+        const headers = accessToken ? { authorization: `Bearer ${accessToken}` } : {};
+        return {
+          url: `/api/course/${slug ? `${slug}/` : ""}${buildQueryParams({ search, page_size: rowsperpage, page, exclude_by })}`,
+          method: "GET",
+          headers
+        }
+      },
+    }),
+    getUserViewChapter: builder.query({
+      query: ({ accessToken, chapter_slug}) => {
+        const headers = accessToken ? { authorization: `Bearer ${accessToken}` } : {};
+        return {
+          url: `/api/course/chapter/${chapter_slug ? `${chapter_slug}/` : ""}`,
+          method: "GET",
+          headers
+        }
+      },
     }),
     getCourseList: builder.query({
       query: ({ accessToken, search, rowsperpage, page, exclude_by}) => ({
@@ -162,6 +173,20 @@ export const userAuthapi = createApi({
         return { encryptedUrl };
       },
     }),
+    getVideoUrl: builder.query({ 
+      query: ({ slug, accessToken }) => ({
+        url: `/api/chapters/${slug}/video/`,
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+      transformResponse: (response: VideoUrlResponse) => {
+        const videoUrl = response.video_url;
+        const encryptedUrl = btoa(videoUrl); 
+        return { encryptedUrl };
+      },
+    }),
     deleteChapter: builder.mutation({
       query: ({slug, accessToken}) => ({
         url: `/api/chapter/${slug ? `${slug}/` :""}`,
@@ -177,6 +202,7 @@ export const userAuthapi = createApi({
 export const {
   useAllUsersQuery,
   useGetUserViewCourseListQuery,
+  useGetUserViewChapterQuery,
   useGetCourseListQuery,
   useCreateCourseMutation,
   useGetCourseQuery,
@@ -189,5 +215,6 @@ export const {
   useGetChapterQuery,
   useVideoUploaderMutation,
   useGetEncryptedVideoUrlMutation,
+  useGetVideoUrlQuery,
   useDeleteChapterMutation,
 } = userAuthapi;

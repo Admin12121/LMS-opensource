@@ -2,12 +2,10 @@
 
 import * as React from "react";
 import {
-  List ,
-  UserRound ,
-  Compass ,
-  House ,
+  CirclePlay as Play,
+  Shield ,
   Search,
-  ChartSpline ,
+  BadgeCheck ,
   Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -19,29 +17,54 @@ import {
 } from "@/components/ui/resizable";
 import { useState, useEffect } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AccountSwitcher } from "@/components/admin-panel/account-switcher";
-import { Nav } from "@/components/admin-panel/nav";
+import { ChapterLinks } from "@/components/course-panal/chapterLinks";
 import { Kbd } from "@nextui-org/kbd";
 import { usePathname } from "next/navigation";
 import { UserNav } from "@/components/admin-panel/user";
+import { useGetUserViewCourseListQuery } from "@/lib/store/Service/User_Auth_Api";
+import { useRouter } from "next/navigation";
 
+interface Chapter {
+    id: number;
+    title: string;
+    chapterslug: string;
+    description: string;
+    position: number;
+    isPublished: boolean;
+    isFree: boolean;
+    created_at: string;
+    updated_at: string;
+    course: number;
+  }
+  
 interface PanalProps {
   defaultLayout: number[] | undefined;
   defaultCollapsed?: boolean;
   navCollapsedSize: number;
   children: React.ReactNode;
+  accessToken?: string | null;
 }
 
-export function AdminPanel1({
+export function CoursePanal({
   defaultLayout = [20, 80],
   defaultCollapsed = false,
   navCollapsedSize,
+  accessToken,
   children,
 }: PanalProps) {
-  const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
   const [maxSize, setMaxSize] = useState(20);
+  const router = useRouter();
   const pathname = usePathname();
+  const slug = pathname.split('/')[1];
+  const { data, refetch } = useGetUserViewCourseListQuery({accessToken,slug});
 
+  useEffect(() => {
+    if (data?.chapters && pathname === `/${slug}`) {
+      const firstChapterSlug = data.chapters[0].chapterslug; 
+      router.push(`/${slug}/${firstChapterSlug}`); 
+    }
+  }, [data, pathname, slug, router]);
+  
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
@@ -82,101 +105,49 @@ export function AdminPanel1({
           minSize={15}
           maxSize={maxSize}
           onCollapse={() => {
-            setIsCollapsed(true);
             document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(
               true
             )}`;
           }}
           onResize={() => {
-            setIsCollapsed(false);
             document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(
               false
             )}`;
           }}
-          className={cn('p-2 max-md:hidden',
-            isCollapsed &&
-              "min-w-[68px] transition-all duration-300 ease-in-out"
+          className={cn('p-2 max-md:hidden min-w-[230px] transition-all duration-300 ease-in-out'
           )}
         >
           <div className="rounded-lg dark:bg-neutral-900 h-full relative w-full">
-            <div
-              className={cn(
-                "flex h-[52px] items-center justify-center",
-                isCollapsed ? "h-[52px]" : "px-2"
-              )}
-            >
-              <AccountSwitcher isCollapsed={isCollapsed}  />
-            </div>
-            { <div className=" p-2">
+            <div className=" p-2">
               <form>
-                <div className={`relative dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white rounded-lg ${isCollapsed ? "w-[36px] h-[36px]" : "w-full"}`}>
-                  {isCollapsed ? <></> : <> <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                <div className={`relative dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white rounded-lg w-full`}>
+                   <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                       placeholder="Search"
                       className="pl-8 border-0 focus:outline-none focus-visible:ring-0"
-                    /></>}
+                    />
                   <Kbd
                     keys={["command"]}
                     className="rounded-md absolute right-2 top-[6px] shadow-lg"
                   ></Kbd>
                 </div>
               </form>
-            </div>}
-            <Nav
-              isCollapsed={isCollapsed}
-              links={[
-                {
-                  title: "Dashboard",
-                  label: "128",
-                  href: "/dashboard",
-                  icon: House,
-                  variant: pathname.startsWith("/dashboard") ? "default" : "ghost",
-                },
-                {
-                  title: "Browser",
-                  label: "9",
-                  href: "/browser",
-                  icon: Compass,
-                  variant: pathname.startsWith("/browser") ? "default" : "ghost",
-                },
-                {
-                  title: "Courses",
-                  label: "",
-                  icon: List,
-                  href: "/courses",
-                  variant: pathname.startsWith("/courses") ? "default" : "ghost",
-                  prefetch: true,
-                },
-                {
-                  title: "Users",
-                  label: "",
-                  icon: UserRound,
-                  href: "/users",
-                  variant: pathname.startsWith("/users") ? "default" : "ghost",
-                },
-                {
-                  title: "Analytics",
-                  label: "",
-                  icon: ChartSpline,
-                  href: "/analytics",
-                  variant: pathname.startsWith("/analytics") ? "default" : "ghost",
-                },
-                {
-                  title: "Trash",
-                  label: "",
-                  icon: Trash2,
-                  href: "/trash",
-                  variant: pathname.startsWith("/trash")? "default" : "ghost",
-                },
-              ]}
-            />
+            </div>
+            {data?.chapters && <ChapterLinks
+                links={data?.chapters.map((chapter:Chapter) => ({
+                title: `${chapter.title.slice(0, 25)}...`,
+                label: chapter.id.toString(), 
+                href: `/${slug}/${chapter.chapterslug}`, 
+                icon: data?.has_purchased ? Play : chapter.isFree ? Play : Shield,
+                variant: pathname.split('/').pop() === chapter.chapterslug ? "default" : "ghost",
+                }))}
+            />}
             <div
               className={cn(
-                "flex h-[52px] items-center justify-center bottom-1 absolute w-full",
-                isCollapsed ? "h-[52px]" : "px-2"
+                "flex h-[52px] items-center justify-center bottom-1 absolute w-full px-2"
               )}
             >
-              <UserNav isCollapsed={isCollapsed}/>
+              <UserNav />
             </div>            
           </div>
         </ResizablePanel> 
