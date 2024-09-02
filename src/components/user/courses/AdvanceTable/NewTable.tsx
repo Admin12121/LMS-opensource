@@ -28,6 +28,7 @@ import {
   SortDescriptor,
   Selection,
 } from "@nextui-org/table";
+import { formatPrice } from "@/lib/format";
 import {
   Card,
   CardContent,
@@ -71,6 +72,7 @@ interface Course {
   created_at: string;
   updated_at: string;
   price?: number | null;
+  isFree: boolean;
   category?: Category;
 }
 
@@ -230,7 +232,10 @@ export default function NewAdvancedTable({
         case "price":
           return (
             <div className="flex flex-col">
-              <p className="text-bold text-small capitalize">{course?.price ? course?.price : "not set"}</p>
+              <p className="text-bold text-small capitalize">{course?.isFree ? (<Chip
+              className={`capitalize border-none gap-1 text-neutral-950`}
+              variant={course.isFree ? "default" : "outline"}
+            >Free</Chip>) : course?.price && formatPrice(course?.price)}</p>
             </div>
           );
         case "status":

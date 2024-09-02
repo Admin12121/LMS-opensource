@@ -11,6 +11,8 @@ import { IoVideocam } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import VideoUploaderForm from "./components/VideoUploaderForm";
 import { DeleteChapter } from "./components/deleteChapter";
+import Attachment from "./components/attachment";
+import { CiFileOn } from "react-icons/ci";
 const DescriptionForm = dynamic(() => import("./components/descriptionForm"), {
   ssr: false,
 });
@@ -46,7 +48,12 @@ const Chapter = ({
 
   const requiredFields = [data?.title, data?.description, videoUrl];
   const Populated = (field: any) => {
-    return field !== null && field !== "undefined" && field !== undefined && field.trim() !== "";
+    return (
+      field !== null &&
+      field !== "undefined" &&
+      field !== undefined &&
+      field.trim() !== ""
+    );
   };
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Populated).length;
@@ -130,6 +137,19 @@ const Chapter = ({
                   slug={params}
                   refetch={refetch}
                   onVideoUrlChange={handleVideoUrlChange}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-x-2 mt-2">
+                <CiFileOn size={22} />
+                <h2 className="text-xl">Chapter Resources & Attachments</h2>
+              </div>
+              <div>
+                <Attachment
+                  slug={params}
+                  initialData={data}
+                  refetch={refetch}
                 />
               </div>
             </div>

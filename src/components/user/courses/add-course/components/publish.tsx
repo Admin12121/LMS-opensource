@@ -3,6 +3,7 @@ import { useUpdateCourseMutation, useDeleteCourseMutation } from "@/lib/store/Se
 import { Button } from "@/components/ui/button";
 import { getAccessToken } from "@/actions/gettoken";
 import { toast } from "sonner";
+import confetti from "canvas-confetti";
 import {
   Tooltip,
   TooltipContent,
@@ -54,6 +55,7 @@ export function Publish({
     if (res?.data) {
       if(res.data.isPublished){
         toast.success("Course Published");
+        handleClick()
       } else {
         toast.success("Course Unpublished");
       }
@@ -73,6 +75,37 @@ export function Publish({
       toast.error("Failed to delete course");
     }
   }
+
+  const handleClick = () => {
+    const end = Date.now() + 3 * 1000;
+    const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
+
+    const frame = () => {
+      if (Date.now() > end) return;
+
+      confetti({
+        particleCount: 2,
+        angle: 60,
+        spread: 55,
+        startVelocity: 60,
+        origin: { x: 0, y: 0.5 },
+        colors: colors,
+      });
+      confetti({
+        particleCount: 2,
+        angle: 120,
+        spread: 55,
+        startVelocity: 60,
+        origin: { x: 1, y: 0.5 },
+        colors: colors,
+      });
+
+      requestAnimationFrame(frame);
+    };
+
+    frame();
+  };
+
 
   return (
     <span className="flex items-center gap-x-2">

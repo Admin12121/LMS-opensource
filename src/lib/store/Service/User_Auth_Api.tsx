@@ -140,6 +140,26 @@ export const userAuthapi = createApi({
         },
       }),
     }), 
+    postChapterAttachemnt:builder.mutation({
+      query:({value, accessToken, slug}) =>({
+        url:`api/chapter/${slug ? `${slug}` : ""}/attachment/`,
+        method: "POST",
+        body: value,
+        headers:{
+          authorization: `Bearer ${accessToken}`,
+        }
+      })
+    }),    
+    deleteChapterAttachemnt:builder.mutation({
+      query:({value, accessToken, slug, id}) =>({
+        url:`api/chapter/${slug ? `${slug}` : ""}/attachment/${id ? `?id=${id}` : ""}`,
+        method: "DELETE",
+        body: value,
+        headers:{
+          authorization: `Bearer ${accessToken}`,
+        }
+      })
+    }),    
     getChapter: builder.query({
       query: ({params, accessToken}) => ({
         url: `/api/chapter/${params ? `${params}/` :""}`,
@@ -212,6 +232,8 @@ export const {
   useGetCategoryQuery,
   useUpdateCategoryMutation,
   useUpdateChapterMutation,
+  usePostChapterAttachemntMutation,
+  useDeleteChapterAttachemntMutation,
   useGetChapterQuery,
   useVideoUploaderMutation,
   useGetEncryptedVideoUrlMutation,

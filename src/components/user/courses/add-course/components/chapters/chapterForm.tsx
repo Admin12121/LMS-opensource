@@ -37,6 +37,7 @@ interface ChapterProps {
   slug: string;
   initialData: {
     chapters: Chapter[];
+    isFree: boolean;
   };
   refetch: any;
 }
@@ -115,6 +116,7 @@ const ChapterForm = ({ slug, initialData, refetch }: ChapterProps) => {
           onEdit={onEdit}
           onReorder={onReorder}
           items={initialData.chapters || []}
+          isFree={initialData.isFree}
         />
         </>
       ) : (

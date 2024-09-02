@@ -12,6 +12,7 @@ interface Course {
     image: string | null;
     courseslug: string;
     price: number | null;
+    isFree: boolean;
     isPublished: boolean;
     user_progress: any | null;
     category:CategoryProps;
@@ -53,6 +54,7 @@ const Courselist = ({setSearch,setPage, data, isLoading}:CourselistProps) => {
                       title={item.title}
                       imageUrl={item.image}
                       price={item.price}
+                      free={item.isFree}
                       slug={item.courseslug}
                       progress={item.user_progress}
                       category={item.category.name}

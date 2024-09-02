@@ -1,11 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { PiBookOpenTextLight } from "react-icons/pi";
+import { formatPrice } from "@/lib/format";
 interface CourseProps {
   title: string;
   imageUrl: string | null;
   slug: string;
   price?: number | null;
+  free: boolean;
   progress: any | null;
   category: string;
   chapter_length: number;
@@ -15,6 +17,7 @@ const CourseCard = ({
   title,
   imageUrl,
   price,
+  free,
   slug,
   progress,
   chapter_length,
@@ -40,7 +43,7 @@ const CourseCard = ({
           </h5>
           <p className="text-xs text-muted-foreground">{category}</p>
           <div className="flex items-center gap-x-2 text-sm md:text-xs">
-            <div className="flex items-center gap-x-1 text-slate-500">
+            <div className="flex items-center gap-x-1 light:text-slate-500 text-zinc-200">
               <span className="border-1 rounded-full p-2">
                 <PiBookOpenTextLight />
               </span>
@@ -49,6 +52,9 @@ const CourseCard = ({
               </span>
             </div>
           </div>
+              {progress !==null ? (
+                  <div>TODO</div>
+              ):(<p className="text-md md:text-sm font-medium light:text-slate-600">{free ?  "Free":price && formatPrice(price)}</p>)}
         </div>
       </div>
     </Link>
@@ -78,9 +84,6 @@ export default CourseCard;
                             <span>{chapter_length} {chapter_length === 1 ? "Chapter" : "Chapters"}</span>
                         </div>
                     </div>
-                    {progress !==null ? (
-                        <div>TODO</div>
-                    ):(<p className="text-md md:text-sm font-medium text-slate-600">{price}</p>)}
                 </div>
             </div> */
 }

@@ -56,6 +56,8 @@ export function VideoPlayer({ src, poster }: VideoProps) {
         onPlaying={handlePlaying}
         onSeeking={handleSeek}  // Add an event listener for seeking
         controls  
+        onEnded={()=>{}}
+        autoPlay
       />
     </div>
   );

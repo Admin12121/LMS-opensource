@@ -15,19 +15,31 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner"
-import {useCreateCourseMutation} from "@/lib/store/Service/User_Auth_Api"
+import {useCreateCourseMutation, useGetCategoryQuery} from "@/lib/store/Service/User_Auth_Api"
 import { getAccessToken } from "@/actions/gettoken";
 import { useRouter } from 'next/navigation';
 
+interface Category {
+  id: number; // ID of the category
+  name: string; // Name of the category
+  categoryslug: string;
+  created_at: string;
+  updated_at: string;
+}
+
 const FormSchema = z.object({
-  title: z.string().min(2, {
-    message: "Title must be at least 2 characters.",
+  title: z.string().min(10, {
+    message: "Title must be at least 10 characters.",
   }),
+  category: z.number().min(1, {
+    message: "Category is required",
+  }),  
 });
 
 export default function AddCourse() {
   const router = useRouter();
   const [CreateCourse, { isLoading }] = useCreateCourseMutation({})
+  // const frameworks: Category[] = data || [];
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {

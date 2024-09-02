@@ -21,6 +21,7 @@ interface ChapterSettingFormProps {
   initialData: {
     isFree: boolean;
     isPublished: boolean;
+    course_isFree: boolean;
   };
   refetch: any;
   completionText: boolean;
@@ -78,15 +79,28 @@ const ChapterSettingForm = ({
             name="isFree"
             control={form.control}
             render={({ field }) => (
-              <Switch
-                id="isFree"
-                checked={field.value}
-                onCheckedChange={(checked) => {
-                  field.onChange(checked);
-                  handleSwitchChange("isFree", checked);
-                }}
-                disabled={isLoading}
-              />
+              <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div>
+                    <Switch
+                      id="isFree"
+                      checked={field.value}
+                      onCheckedChange={(checked) => {
+                        field.onChange(checked);
+                        handleSwitchChange("isFree", checked);
+                      }}
+                      disabled={isLoading || initialData.course_isFree}
+                    />
+                  </div>
+                </TooltipTrigger>
+                {initialData.course_isFree && (
+                  <TooltipContent side="top">
+                    <p>Cannot change because the course is free</p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </TooltipProvider>
             )}
           />
         </div>
