@@ -61,7 +61,8 @@ const Login = () => {
 
   return (
     <Cardwrapper
-      headerLabel="Welcome Back"
+      title="Login"
+      headerLabel="Network with people from around the world, join groups, create your own, watch courses and become the best version of yourself."
       backButtonLabel="Don't have an account?"
       backButtonHref="/auth/register"
       showSocial
@@ -74,13 +75,13 @@ const Login = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       disabled={isLoading}
                       type="email"
-                      placeholder="john@gmail.com"
+                      placeholder="Email"
+                      className="bg-themeBlack border-themeGray text-themeTextGray placeholder:text-[rgb(39 39 42 / 1)]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -92,14 +93,14 @@ const Login = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       disabled={isLoading}
                       type="password"
-                      placeholder="********"
+                      placeholder="Password"
                       autoComplete="off"
+                      className="bg-themeBlack border-themeGray text-themeTextGray placeholder:text-[rgb(39 39 42 / 1)]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -107,9 +108,7 @@ const Login = () => {
               )}
             />
           </div>
-          <Button size="sm" variant="link" asChild className="px-0 !mt-2 font-normal">
-            <Link href="/auth/reset-password">Forgot Password?</Link>
-          </Button>
+            <Link href="/auth/reset-password" className="!mx-1 !my-2 text-themeTextGray text-xs hover:text-themeTextWhite transition duration-500">Forgot Password?</Link>
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button disabled={isLoading} loading={isLoading} type="submit" className="w-full !mt-2">

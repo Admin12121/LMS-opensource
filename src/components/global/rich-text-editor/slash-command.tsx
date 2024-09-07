@@ -1,4 +1,4 @@
-import { upload } from "@/lib/uploadcare"
+// import { upload } from "@/lib/uploadcare"
 import {
   CheckSquare,
   Code,
@@ -149,19 +149,19 @@ export const suggestionItems = createSuggestionItems([
       input.onchange = async () => {
         if (input.files?.length) {
           const file = input.files[0]
-          const uploaded = await upload.uploadFile(file)
+          // const uploaded = await upload.uploadFile(file)
           //This should return a src of the uploaded image
-          const imgsrc = `https://ucarecdn.com/${uploaded.uuid}/`
-          if (imgsrc) {
-            editor.commands.insertContent([
-              {
-                type: "image",
-                attrs: {
-                  src: imgsrc,
-                },
-              },
-            ])
-          }
+          // const imgsrc = `https://ucarecdn.com/${uploaded.uuid}/`
+          // if (imgsrc) {
+          //   editor.commands.insertContent([
+          //     {
+          //       type: "image",
+          //       attrs: {
+          //         src: imgsrc,
+          //       },
+          //     },
+          //   ])
+          // }
         }
       }
       input.click()

@@ -1,10 +1,12 @@
 "use client";
 
 import { Card, CardContent, CardFooter } from "../ui/card";
+import { Separator } from "@/components/ui/separator";
 import { BackButton } from "./backbutton";
 import { Header } from "./header";
 import Social from "./social";
 interface CardwrapperProps {
+  title: string;
   children: React.ReactNode;
   headerLabel: string;
   backButtonLabel: string;
@@ -17,10 +19,11 @@ interface CardwrapperProps {
     footer?: string;
     backButton?: string;
     social?: string;
-  };  
+  };
 }
 
 const Cardwrapper = ({
+  title,
   children,
   headerLabel,
   backButtonLabel,
@@ -29,13 +32,21 @@ const Cardwrapper = ({
   classNames = {}, // Provide default empty object
 }: CardwrapperProps) => {
   return (
-    <Card className={`w-[400px] shadow-md ${classNames.card || ""}`}>
-      <Header label={headerLabel} className={classNames.header || ""} />
+    <Card className={`w-full border-0 shadow-none ${classNames.card || ""}`}>
+      <Header title={title} label={headerLabel} className={classNames.header || ""} />
       <CardContent className={classNames.content || ""}>{children}</CardContent>
       {showSocial && (
-        <CardFooter className={classNames.social || ""}>
-          <Social />
-        </CardFooter>
+        <>
+          <div className="my-10 w-full relative">
+            <div className="bg-black p-3 absolute text-themeTextGray text-xs top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              OR CONTINUE WITH
+            </div>
+            <Separator orientation="horizontal" className="bg-themeGray" />
+          </div>
+          <CardFooter className={classNames.social || ""}>
+            <Social />
+          </CardFooter>
+        </>
       )}
       <CardFooter className={`flex justify-center ${classNames.footer || ""}`}>
         <BackButton

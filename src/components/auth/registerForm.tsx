@@ -42,7 +42,8 @@ const RegisterForm = () => {
 
   return (
     <Cardwrapper
-      headerLabel="Create an account"
+      title="Signup"
+      headerLabel="Network with people from around the world, join groups, create your own, watch courses and become the best version of yourself."
       backButtonLabel="Already have an account?"
       backButtonHref="/auth/login"
       showSocial
@@ -55,13 +56,13 @@ const RegisterForm = () => {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       disabled={isLoading}
                       type="text"
-                      placeholder="John Doe"
+                      placeholder="Name"
+                      className="bg-themeBlack border-themeGray text-themeTextGray placeholder:text-[rgb(39 39 42 / 1)]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -73,13 +74,13 @@ const RegisterForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       disabled={isLoading}
                       type="email"
-                      placeholder="john@gmail.com"
+                      placeholder="Email"
+                      className="bg-themeBlack border-themeGray text-themeTextGray placeholder:text-[rgb(39 39 42 / 1)]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -91,14 +92,14 @@ const RegisterForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       disabled={isLoading}
                       type="password"
-                      placeholder="********"
+                      placeholder="Password"
                       autoComplete="off"
+                      className="bg-themeBlack border-themeGray text-themeTextGray placeholder:text-[rgb(39 39 42 / 1)]"
                     />
                   </FormControl>
                   <FormMessage />

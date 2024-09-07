@@ -60,6 +60,7 @@ const PasswordForm = () => {
   
   return (
     <Cardwrapper
+      title="Password"
       headerLabel="Forgot your Password"
       backButtonLabel="Back to Login"
       backButtonHref="/auth/login"

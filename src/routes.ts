@@ -1,6 +1,8 @@
 export const publicRoutes = [
     "/",
-    "/auth/(.*)"
+    "/auth/(.*)",
+    "/explore",
+    "/explore/(.*)",
 ]
 
 export const protectedRoutes = [

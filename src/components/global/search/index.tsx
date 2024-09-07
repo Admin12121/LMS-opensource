@@ -1,7 +1,7 @@
 "use client"
-
+import { useState } from "react"
 import { Input } from "@/components/ui/input"
-import { useSearch } from "@/hooks/groups"
+// import { useSearch } from "@/hooks/groups"
 import { cn } from "@/lib/utils"
 import { SearchIcon } from "lucide-react"
 
@@ -22,7 +22,7 @@ const Search = ({
   inputStyle,
   placeholder,
 }: Props) => {
-  const { query, onSearchQuery } = useSearch(searchType)
+  const [query, setQuery] = useState("")
 
   return (
     <div
@@ -35,7 +35,7 @@ const Search = ({
     >
       <SearchIcon className={cn(iconStyle || "text-themeTextGray")} />
       <Input
-        onChange={onSearchQuery}
+        onChange={(e) => setQuery(e.target.value)}
         value={query}
         className={cn("bg-transparent border-0", inputStyle)}
         placeholder={placeholder}
