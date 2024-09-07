@@ -43,8 +43,7 @@ const Confetti = forwardRef<ConfettiRef, Props>((props, ref) => {
   const instanceRef = useRef<ConfettiInstance | null>(null); // confetti instance
 
   const canvasRef = useCallback(
-    // https://react.dev/reference/react-dom/components/common#ref-callback
-    // https://reactjs.org/docs/refs-and-the-dom.html#callback-refs
+
     (node: HTMLCanvasElement) => {
       if (node !== null) {
         // <canvas> is mounted => create the confetti instance
@@ -119,6 +118,8 @@ function ConfettiButton({ options, children, ...props }: ConfettiButtonProps) {
     </Button>
   );
 }
+
+Confetti.displayName = "Confetti";
 
 export { Confetti, ConfettiButton };
 
