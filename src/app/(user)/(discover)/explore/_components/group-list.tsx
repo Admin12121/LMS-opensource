@@ -1,4 +1,3 @@
-import InfiniteScrollObserver from "@/components/global/infinite-scroll"
 import { NoResult } from "@/components/global/search/no-results"
 import GroupCard from "./group-card"
 // import { useGroupList } from "@/hooks/groups"

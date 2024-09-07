@@ -1,4 +1,4 @@
-import InfiniteScrollObserver from "@/components/global/infinite-scroll"
+// import InfiniteScrollObserver from "@/components/global/infinite-scroll"
 import { Loader } from "@/components/global/loader"
 import { NoResult } from "@/components/global/search/no-results"
 // import { GroupStateProps } from "@/redux/slices/search-slice"
@@ -21,7 +21,7 @@ export const SearchGroups = ({ data, searching, query }: Props) => {
           <NoResult />
         )}
       </Loader>
-      {data.length > 5 && (
+      {/* {data.length > 5 && (
         <InfiniteScrollObserver
           action="GROUPS"
           identifier={query as string}
@@ -30,7 +30,7 @@ export const SearchGroups = ({ data, searching, query }: Props) => {
         >
           <></>
         </InfiniteScrollObserver>
-      )}
+      )} */}
     </div>
   )
 }
