@@ -6,6 +6,7 @@ interface LoginErrorProps {
 const LoginError = ({errorParam}: LoginErrorProps) => {
   return (
     <Cardwrapper
+      title="Login Error"
       headerLabel={errorParam}
       backButtonLabel="Back to Login"
       backButtonHref="/auth/login"
