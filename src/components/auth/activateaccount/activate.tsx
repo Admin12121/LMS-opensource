@@ -80,6 +80,7 @@ const Activate = () => {
 
   return (
     <Cardwrapper
+      title="Comfirming your verification"
       headerLabel="Comfirming your verification"
       backButtonLabel="Back to Login"
       backButtonHref="/auth/login"
