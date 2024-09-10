@@ -8,20 +8,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
-import { SpinnerLoader as Spinner} from "@/components/ui/spinner";
-import { getAccessToken } from "@/actions/gettoken";
 import dynamic from 'next/dynamic';
-import BackdropGradient from "@/components/global/backdrop-gradient";
 
-const Browser = dynamic(() => import('@/components/browser/browser'), {
-  loading: () => <span className="w-full h-full flex items-center justify-center"><Spinner/></span>,
-  ssr: true,
-});
+const CreateFile = dynamic(() => import('@/components/workspace/create/create'), { ssr: false })
 
-export default async function BrowserPage() {
-  const accessToken = await getAccessToken()
+export default  function CategoriesPage() {
   return (
-    <ContentLayout title="All Posts">
+    <ContentLayout title="Categories" classname="pt-2">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -37,16 +30,17 @@ export default async function BrowserPage() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Browser</BreadcrumbPage>
+            <BreadcrumbLink asChild>
+              <Link href="/workspace">Workspace</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Create File</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <BackdropGradient
-        className="w-4/12 md:w-5/12 xl:w-3/12 xl:h-2/6 h-3/6 top-20"
-        container="items-center w-full"
-      >
-        {accessToken && <Browser accessToken={accessToken}/>}
-      </BackdropGradient>
+      <CreateFile />
     </ContentLayout>
   );
 }

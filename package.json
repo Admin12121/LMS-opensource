@@ -9,6 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@editorjs/checklist": "^1.6.0",
+    "@editorjs/editorjs": "^2.30.5",
+    "@editorjs/header": "^2.8.7",
+    "@editorjs/list": "^1.10.0",
+    "@editorjs/paragraph": "^2.11.6",
+    "@editorjs/warning": "^1.4.0",
+    "@excalidraw/excalidraw": "^0.17.6",
     "@faker-js/faker": "^8.4.1",
     "@hello-pangea/dnd": "^16.6.0",
     "@hookform/error-message": "^2.0.1",
@@ -61,6 +68,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
+    "convex": "^1.15.0",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.2.0",
     "framer-motion": "^11.3.29",

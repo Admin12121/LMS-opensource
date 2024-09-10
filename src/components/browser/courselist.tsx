@@ -46,7 +46,7 @@ const Courselist = ({setSearch,setPage, data, isLoading}:CourselistProps) => {
      (<>
         {!data.results ? <span className="w-full h-full flex items-center justify-center">No courses found</span> : 
         (<>
-        <div className='overflow-hidden overflow-y-auto'>
+        <div className='overflow-hidden overflow-y-auto w-full'>
            <div className='grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-2'>
                 {course && course.map((item)=>(
                     <CourseCard

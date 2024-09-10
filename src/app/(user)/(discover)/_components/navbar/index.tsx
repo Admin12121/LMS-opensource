@@ -3,11 +3,14 @@ import { Button } from "@/components/ui/button"
 import { CheckBadge, Logout } from "@/icons"
 import { MenuIcon } from "lucide-react"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import { GroupDropDown } from "./group-dropdown"
+import { getUser } from "@/actions/gettoken"
+import { UserWidget } from "@/components/global/user-widget"
 
 export const Navbar = async () => {
-  // const user = await onAuthenticatedUser()
-  // const groups = await onGetUserGroups(user.id!)
+  const user = await getUser()
+  // if(!user) return redirect("/auth/login")
 
   return (
     <div className="flex px-5 py-3 items-center bg-themeBlack border-b-[1px] border-themeDarkGray fixed z-50 w-full bg-clip-padding backdrop--blur__safari backdrop-filter backdrop-blur-2xl bg-opacity-60">
@@ -30,8 +33,8 @@ export const Navbar = async () => {
         <div>Content</div>
       </GlassSheet>
       <div className="flex-1 lg:flex hidden justify-end gap-3">
-        {/* <Link href={user.status === 200 ? `/group/create` : "/sign-in"}> */}
-        <Link href={"/sign-in"}>
+        <Link href={user ? `/group/create` : "/sign-in"}>
+        {/* <Link href={"/sign-in"}> */}
           <Button
             variant="outline"
             className="bg-themeBlack rounded-2xl flex gap-2 border-themeGray hover:bg-themeGray"
@@ -40,10 +43,10 @@ export const Navbar = async () => {
             Create Group
           </Button>
         </Link>
-        {/* {user.status === 200 ? (
+        {user ? (
           <UserWidget image={user.image!} />
         ) : (
-          <Link href="/sign-in">
+          <Link href="/auth/login">
             <Button
               variant="outline"
               className="bg-themeBlack rounded-2xl flex gap-2 border-themeGray hover:bg-themeGray"
@@ -52,16 +55,7 @@ export const Navbar = async () => {
               Login
             </Button>
           </Link>
-          )} */}
-          <Link href="/sign-in">
-            <Button
-              variant="outline"
-              className="bg-themeBlack rounded-2xl flex gap-2 border-themeGray hover:bg-themeGray"
-            >
-              <Logout />
-              Login
-            </Button>
-          </Link>
+          )}
       </div>
     </div>
   )

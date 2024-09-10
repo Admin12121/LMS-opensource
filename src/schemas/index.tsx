@@ -32,3 +32,14 @@ export const RegisterSchema = z.object({
     password: z.string().min(6,{message:"Password must be at least 6 characters long"}),
 });
 
+
+export interface FILE{
+    archive:boolean,
+    createdBt:string,
+    document:string,
+    fileName:string,
+    teamId:string,
+    whiteboard:string,
+    _id:string,
+    _creationTime:number
+  }

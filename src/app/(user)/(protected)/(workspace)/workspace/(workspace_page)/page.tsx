@@ -11,17 +11,16 @@ import {
 import { SpinnerLoader as Spinner} from "@/components/ui/spinner";
 import { getAccessToken } from "@/actions/gettoken";
 import dynamic from 'next/dynamic';
-import BackdropGradient from "@/components/global/backdrop-gradient";
 
-const Browser = dynamic(() => import('@/components/browser/browser'), {
+const Workspace = dynamic(() => import('@/components/workspace/tabledata'), {
   loading: () => <span className="w-full h-full flex items-center justify-center"><Spinner/></span>,
   ssr: true,
 });
 
-export default async function BrowserPage() {
+export default async function WorkspacePage() {
   const accessToken = await getAccessToken()
   return (
-    <ContentLayout title="All Posts">
+    <ContentLayout title="Workspace">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -37,16 +36,11 @@ export default async function BrowserPage() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Browser</BreadcrumbPage>
+            <BreadcrumbPage>Workspace</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <BackdropGradient
-        className="w-4/12 md:w-5/12 xl:w-3/12 xl:h-2/6 h-3/6 top-20"
-        container="items-center w-full"
-      >
-        {accessToken && <Browser accessToken={accessToken}/>}
-      </BackdropGradient>
+      {accessToken && <Workspace accessToken={accessToken}/>}
     </ContentLayout>
   );
 }

@@ -9,6 +9,7 @@ import {
   Search,
   ChartSpline ,
   Trash2,
+  Network 
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -131,6 +132,13 @@ export function AdminPanel1({
                   href: "/dashboard",
                   icon: House,
                   variant: pathname.startsWith("/dashboard") ? "default" : "ghost",
+                },
+                {
+                  title: "WorkSpace",
+                  label: "2",
+                  href: "/workspace",
+                  icon: Network,
+                  variant: pathname.startsWith("/workspace") ? "default" : "ghost",
                 },
                 {
                   title: "Browser",

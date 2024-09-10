@@ -216,6 +216,25 @@ export const userAuthapi = createApi({
         },
       }),
     }), 
+    getFileList: builder.query({
+      query: ({accessToken, team_slug, slug}) => ({
+        url: `/api/workspace/files/${team_slug ? `team/${team_slug}/` : ""}${slug ? `${slug}/` : ""}`,
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }),
+    postFile: builder.mutation({
+      query: ({accessToken, data}) => ({
+        url: `/api/workspace/files/`,
+        method: "POST",
+        body: data,
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -239,4 +258,6 @@ export const {
   useGetEncryptedVideoUrlMutation,
   useGetVideoUrlQuery,
   useDeleteChapterMutation,
+  useGetFileListQuery,
+  usePostFileMutation,
 } = userAuthapi;

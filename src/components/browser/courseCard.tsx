@@ -24,40 +24,40 @@ const CourseCard = ({
   category,
 }: CourseProps) => {
   return (
-    <Link href={`/${slug}`} className="p-2 mt-5">
-      <div className="relative flex flex-col rounded-xl light:bg-white dark:bg-neutral-900 bg-clip-border light:text-gray-700 shadow-md">
-        <div className="relative mx-4 -mt-6 h-40 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40 ">
-          <Image
-            src={imageUrl ? imageUrl : ""}
-            alt={title}
-            fill
-            quality={100}
-            sizes="100%"
-            priority
-            className="w-full h-full object-cover"
-          />
-        </div>
-        <div className="p-4 flex flex-col gap-1">
-          <h5 className="block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
-            {title}
-          </h5>
-          <p className="text-xs text-muted-foreground">{category}</p>
-          <div className="flex items-center gap-x-2 text-sm md:text-xs">
-            <div className="flex items-center gap-x-1 light:text-slate-500 text-zinc-200">
-              <span className="border-1 rounded-full p-2">
-                <PiBookOpenTextLight />
-              </span>
-              <span>
-                {chapter_length} {chapter_length === 1 ? "Chapter" : "Chapters"}
-              </span>
-            </div>
+      <Link href={`/${slug}`} className="p-2 mt-5">
+        <div className="relative flex flex-col rounded-xl bg-themeGray border-themeGray bg-clip-padding backdrop--blur__safari backdrop-filter backdrop-blur-4xl bg-opacity-40">
+          <div className="relative mx-4 -mt-6 h-40 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40 ">
+            <Image
+              src={imageUrl ? imageUrl : ""}
+              alt={title}
+              fill
+              quality={100}
+              sizes="100%"
+              priority
+              className="w-full h-full object-cover"
+            />
           </div>
-              {progress !==null ? (
-                  <div>TODO</div>
-              ):(<p className="text-md md:text-sm font-medium light:text-slate-600">{free ?  "Free":price && formatPrice(price)}</p>)}
+          <div className="p-4 flex flex-col gap-1">
+            <h5 className="block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
+              {title}
+            </h5>
+            <p className="text-xs text-muted-foreground">{category}</p>
+            <div className="flex items-center gap-x-2 text-sm md:text-xs">
+              <div className="flex items-center gap-x-1 light:text-slate-500 text-zinc-200">
+                <span className="border-1 rounded-full p-2">
+                  <PiBookOpenTextLight />
+                </span>
+                <span>
+                  {chapter_length} {chapter_length === 1 ? "Chapter" : "Chapters"}
+                </span>
+              </div>
+            </div>
+                {progress !==null ? (
+                    <div>TODO</div>
+                ):(<p className="text-md md:text-sm font-medium light:text-slate-600">{free ?  "Free":price && formatPrice(price)}</p>)}
+          </div>
         </div>
-      </div>
-    </Link>
+      </Link>
   );
 };
 
