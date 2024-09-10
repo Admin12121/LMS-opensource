@@ -9,21 +9,45 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { useGetFileListQuery } from "@/lib/store/Service/User_Auth_Api";
+import { useGetFileListQuery , useUpdateFileMutation} from "@/lib/store/Service/User_Auth_Api";
 
 function Workspace({ accessToken, params }: any) {
-  const [triggerSave, setTriggerSave] = useState(false);
   const [fileData, setFileData] = useState<FILE | any>();
+  const [initialDocumentData, setInitialDocumentData] = useState<any>(null);
+  const [initialWhiteBoardData, setInitialWhiteBoardData] = useState<any>(null);
   const [type, setType] = useState<string>("Both");
+  const [documentData, setDocumentData] = useState<any>(null);
+  const [whiteBoardData, setWhiteBoardData] = useState<any>(null);
+  const [isSaveEnabled, setIsSaveEnabled] = useState(false);
   const { data, refetch, isLoading } = useGetFileListQuery({ accessToken, slug: params });
+  const [updateFile, {isLoading:isLoadingUpdate}] = useUpdateFileMutation();
+
+  useEffect(()=>{
+    setFileData(data);
+    setInitialDocumentData(data?.document);
+    setInitialWhiteBoardData(data?.whiteboard);
+  },[data]);
 
   useEffect(() => {
-    setTriggerSave(false);
-  }, [type]);
+    const isDocumentChanged = JSON.stringify(documentData) !== JSON.stringify(initialDocumentData);
+    const isWhiteBoardChanged = JSON.stringify(whiteBoardData) !== JSON.stringify(initialWhiteBoardData);
+    setIsSaveEnabled(isDocumentChanged || isWhiteBoardChanged);
+  }, [documentData, whiteBoardData, initialDocumentData, initialWhiteBoardData]);
+
+  const handleSave = async () => {
+    const payload = {
+      document: JSON.stringify(documentData),
+      whiteboard: JSON.stringify(whiteBoardData),
+    };
+    await updateFile({ accessToken, data: payload, slug: params });
+    setInitialDocumentData(documentData);
+    setInitialWhiteBoardData(whiteBoardData); 
+    setIsSaveEnabled(false);
+  };
 
   return (
     <div className="w-full">
-      <WorkspaceHeader setType={setType} type={type} onSave={() => setTriggerSave(!triggerSave)} />
+      <WorkspaceHeader fileName={fileData?.filename} setType={setType} type={type} onSave={() => handleSave()} isSaveEnabled={isSaveEnabled} isLoadingUpdate={isLoadingUpdate} />
       <ResizablePanelGroup
         direction="horizontal"
         className="h-full items-stretch max-w-[2400px]"
@@ -36,9 +60,10 @@ function Workspace({ accessToken, params }: any) {
           >
             <div className="h-screen">
               <Editor
-                onSaveTrigger={triggerSave}
-                fileId={params}
+                Loading={isLoading}
                 fileData={fileData}
+                setDocumentData={setDocumentData}
+                documentData={documentData}
               />
             </div>
           </ResizablePanel>
@@ -51,9 +76,10 @@ function Workspace({ accessToken, params }: any) {
           >
             <div className="h-screen border-l">
               <Canvas
-                onSaveTrigger={triggerSave}
-                fileId={params}
+                Loading={isLoading}
                 fileData={fileData}
+                setWhiteBoardData={setWhiteBoardData}
+                whiteBoardData={whiteBoardData}
               />
             </div>
           </ResizablePanel>

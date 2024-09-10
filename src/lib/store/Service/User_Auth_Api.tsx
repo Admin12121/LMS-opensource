@@ -235,6 +235,16 @@ export const userAuthapi = createApi({
         },
       }),
     }),
+    updateFile: builder.mutation({
+      query: ({accessToken, data, slug}) => ({
+        url: `/api/workspace/files/${slug}/`,
+        method: "PATCH",
+        body: data,
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -260,4 +270,5 @@ export const {
   useDeleteChapterMutation,
   useGetFileListQuery,
   usePostFileMutation,
+  useUpdateFileMutation,
 } = userAuthapi;

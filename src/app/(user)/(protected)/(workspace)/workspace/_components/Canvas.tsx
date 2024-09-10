@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Excalidraw, MainMenu, WelcomeScreen } from "@excalidraw/excalidraw";
+import { useUpdateFileMutation } from "@/lib/store/Service/User_Auth_Api"
 import { FILE } from "@/schemas";
 import Image from "next/image";
-function Canvas({
-  onSaveTrigger,
-  fileId,
-  fileData,
-}: {
-  onSaveTrigger?: any;
-  fileId: any;
-  fileData: FILE;
-}) {
-  const [whiteBoardData, setWhiteBoardData] = useState<any>();
+import { SpinnerLoader } from "@/components/ui/spinner";
 
+function Canvas({
+  fileData,
+  Loading,
+  setWhiteBoardData,
+  whiteBoardData
+}: {
+  fileData: FILE;
+  Loading:boolean;
+  setWhiteBoardData: (data: any) => void;
+  whiteBoardData: string;
+}) {
   return (
     <div style={{ height: "calc(100vh - 66px)" }}>
-        <Excalidraw
+        {Loading ? <div className="flex items-center justify-center h-full">
+          <SpinnerLoader className="h-4 w-4 animate-spin" />
+        </div> : <Excalidraw
           theme="dark"
           initialData={{
-            // elements: fileData?.whiteboard && JSON.parse(fileData?.whiteboard),
+            elements: fileData?.whiteboard && JSON.parse(fileData?.whiteboard),
             scrollToContent: true
           }}
           onChange={(excalidrawElements, appState, files) =>
@@ -54,7 +59,7 @@ function Canvas({
             </WelcomeScreen.Center.Heading>
           </WelcomeScreen.Center>
         </WelcomeScreen>
-        </Excalidraw>
+        </Excalidraw>}
     </div>
   );
 }

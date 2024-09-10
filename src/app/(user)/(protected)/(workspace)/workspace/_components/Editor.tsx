@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react'
+import { useUpdateFileMutation } from "@/lib/store/Service/User_Auth_Api"
 import EditorJS  from '@editorjs/editorjs';
 // @ts-ignore
 import Header from '@editorjs/header';
@@ -11,6 +12,18 @@ import Checklist from '@editorjs/checklist'
 import Paragraph from '@editorjs/paragraph';
 // @ts-ignore
 import Warning from '@editorjs/warning';
+// @ts-ignore
+import LinkTool from '@editorjs/link';
+// @ts-ignore
+import RawTool from '@editorjs/raw';
+// @ts-ignore
+import SimpleImage from "@editorjs/simple-image";
+// @ts-ignore
+import Embed from '@editorjs/embed';
+// @ts-ignore
+import Quote from '@editorjs/quote';
+// @ts-ignore
+import Table from '@editorjs/table'
 import { toast } from 'sonner';
 import { FILE } from '@/schemas';
 
@@ -33,19 +46,15 @@ const rawDocument={
     }],
     "version" : "2.8.1"
 }
-function Editor({onSaveTrigger,fileId,fileData}:{onSaveTrigger?:any,fileId:any,fileData:FILE}) {
+function Editor({  fileData, Loading, documentData, setDocumentData }: { Loading: boolean, fileData: FILE,  documentData: any, setDocumentData: (data: any) => void }) {
+
     const ref=useRef<EditorJS>();
     const [document,setDocument]=useState(rawDocument);
-    const [isEditorReady,setIsEditorReady]=useState(true);
 
     useEffect(()=>{
-        if(isEditorReady && document){
-            initEditor();
-            setIsEditorReady(false);
-        }
-    },[document])
-
-
+      fileData&&initEditor();
+    },[fileData])
+    
     const initEditor=()=>{
         const editor = new EditorJS({
             tools:{
@@ -69,12 +78,35 @@ function Editor({onSaveTrigger,fileId,fileData}:{onSaveTrigger?:any,fileId:any,f
                     class: Checklist,
                     inlineToolbar: true,
                   },
+                  linkTool: {
+                    class: LinkTool,
+                    config: {
+                      endpoint: 'http://localhost:8008/fetchUrl', // Your backend endpoint for url data fetching,
+                    }
+                  },                  
                   paragraph: Paragraph,
+                  raw: RawTool,
+                  embed: Embed,
+                  image: {
+                    class: SimpleImage,
+                    inlineToolbar: true
+                  },
+                  quote: Quote,
+                  table: Table,
                   warning: Warning,
             },
            
             holder: 'editorjs',
-            data: document
+            data: fileData?.document?JSON.parse(fileData?.document):document ,
+            onChange: () => {
+              if (ref.current) {
+                ref.current.save().then((outputData) => {
+                  setDocumentData(outputData);
+                }).catch((error) => {
+                  console.log('Saving failed: ', error)
+                });
+              }
+            }            
           });
           ref.current=editor;
     }
