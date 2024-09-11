@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useGetUserViewCourseListQuery } from "@/lib/store/Service/User_Auth_Api";
 import Courselist from "./courselist";
 import { GroupListSlider } from "@/components/global/group-list-slider";
+import { toast } from "sonner";
 
 const Browser = ({ accessToken }: { accessToken: string }) => {
   const [search, setSearch] = useState<string>("");
@@ -14,12 +15,31 @@ const Browser = ({ accessToken }: { accessToken: string }) => {
     page,
     accessToken,
   });
-  const category = ["All", "Technology and Tools", "Mobile Application Development", "Programming Languages", "DevOps", "Cloud Computing", "Artificial Intelligence", "Others"]
+  
+  useEffect(() => {
+    const socket = new WebSocket(
+      `ws://localhost:8000/ws/notifications/?token=${accessToken}`
+    );
+    socket.onopen = () => {
+    };
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      const notification = JSON.parse(data.message);
+      const [messages, setMessages] = useState<string[]>([]);       
+      toast.success(notification.title);
+      setMessages((prevMessages) => [...prevMessages, data.message]);
+    };
+    socket.onclose = () => {
+    };
+    socket.onerror = (error) => {
+    };
+    return () => {
+      socket.close();
+    };
+  }, []);
+
   return (
     <>
-      {/* <span className="w-full py-4 flex flex-wrap">
-        {category.map((text)=><span key={Math.random()} onClick={()=>setCategory(text)} className={`light:border-[#0084ff] border-1 rounded-3xl py-[6px] px-[14px] m-[5px] text-sm cursor-pointer ${usecategory == text ? "light:bg-[#0084ff] dark:bg-zinc-800" : ""}`}>{text}</span>)}
-      </span> */}
       <div className="w-full md:w-[1000px] pb-4">
         <GroupListSlider overlay route />
       </div>

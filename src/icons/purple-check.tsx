@@ -14,8 +14,8 @@ export const PurpleCheck = () => {
       <path
         d="M12.6663 5L6.24967 11.4167L3.33301 8.5"
         stroke="#FAFAFA"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )

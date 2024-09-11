@@ -74,7 +74,6 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
-    "convex": "^1.15.0",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.2.0",
     "framer-motion": "^11.3.29",
@@ -103,6 +102,8 @@
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.167.1",
     "vaul": "^0.9.1",
+    "y-websocket": "^2.0.4",
+    "yjs": "^13.6.19",
     "zod": "^3.23.8",
     "zustand": "^4.5.5"
   },

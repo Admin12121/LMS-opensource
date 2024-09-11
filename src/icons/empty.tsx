@@ -8,7 +8,7 @@ export const Empty = () => {
       xmlns="http://www.w3.org/2000/svg"
     >
       <g opacity="0.74">
-        <g clip-path="url(#clip0_8182_21406)">
+        <g clipPath="url(#clip0_8182_21406)">
           <rect
             width="288.161"
             height="231.765"
@@ -28,7 +28,7 @@ export const Empty = () => {
             rx="5.79412"
             fill="#262626"
             stroke="#343434"
-            stroke-width="0.772549"
+            strokeWidth="0.772549"
           />
         </g>
         <rect
@@ -38,11 +38,11 @@ export const Empty = () => {
           height="230.992"
           rx="10.4294"
           stroke="url(#paint2_linear_8182_21406)"
-          stroke-width="0.772549"
+          strokeWidth="0.772549"
         />
       </g>
       <g filter="url(#filter0_b_8182_21406)">
-        <g clip-path="url(#clip1_8182_21406)">
+        <g clipPath="url(#clip1_8182_21406)">
           <rect
             x="48.6704"
             y="27.0391"
@@ -50,7 +50,7 @@ export const Empty = () => {
             height="231.765"
             rx="10.8157"
             fill="url(#paint3_linear_8182_21406)"
-            fill-opacity="0.7"
+            fillOpacity="0.7"
           />
           <rect
             x="48.6704"
@@ -58,7 +58,7 @@ export const Empty = () => {
             width="288.933"
             height="143.694"
             fill="url(#paint4_linear_8182_21406)"
-            fill-opacity="0.45"
+            fillOpacity="0.45"
           />
           <rect
             x="66.0528"
@@ -68,7 +68,7 @@ export const Empty = () => {
             rx="5.79412"
             fill="#262626"
             stroke="#343434"
-            stroke-width="0.772549"
+            strokeWidth="0.772549"
           />
         </g>
         <rect
@@ -78,11 +78,11 @@ export const Empty = () => {
           height="230.992"
           rx="10.4294"
           stroke="url(#paint5_linear_8182_21406)"
-          stroke-width="0.772549"
+          strokeWidth="0.772549"
         />
       </g>
       <g filter="url(#filter1_b_8182_21406)">
-        <g clip-path="url(#clip2_8182_21406)">
+        <g clipPath="url(#clip2_8182_21406)">
           <rect
             x="105.839"
             y="61.0312"
@@ -90,7 +90,7 @@ export const Empty = () => {
             height="231.765"
             rx="10.8157"
             fill="url(#paint6_linear_8182_21406)"
-            fill-opacity="0.32"
+            fillOpacity="0.32"
           />
           <rect
             x="105.839"
@@ -98,7 +98,7 @@ export const Empty = () => {
             width="288.933"
             height="143.694"
             fill="url(#paint7_linear_8182_21406)"
-            fill-opacity="0.45"
+            fillOpacity="0.45"
           />
           <rect
             x="122.835"
@@ -107,7 +107,7 @@ export const Empty = () => {
             height="33.2196"
             rx="6.18039"
             fill="#262626"
-            fill-opacity="0.25"
+            fillOpacity="0.25"
           />
           <rect
             x="123.222"
@@ -116,8 +116,8 @@ export const Empty = () => {
             height="32.4471"
             rx="5.79412"
             stroke="#343434"
-            stroke-opacity="0.09"
-            stroke-width="0.772549"
+            strokeOpacity="0.09"
+            strokeWidth="0.772549"
           />
         </g>
         <rect
@@ -127,7 +127,7 @@ export const Empty = () => {
           height="230.992"
           rx="10.4294"
           stroke="url(#paint8_linear_8182_21406)"
-          stroke-width="0.772549"
+          strokeWidth="0.772549"
         />
       </g>
       <defs>
@@ -138,9 +138,9 @@ export const Empty = () => {
           width="307.011"
           height="250.615"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feGaussianBlur in="BackgroundImageFix" stdDeviation="4.71255" />
           <feComposite
             in2="SourceAlpha"
@@ -161,9 +161,9 @@ export const Empty = () => {
           width="307.011"
           height="250.615"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feGaussianBlur in="BackgroundImageFix" stdDeviation="4.71255" />
           <feComposite
             in2="SourceAlpha"
@@ -185,8 +185,8 @@ export const Empty = () => {
           y2="231.765"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#2A2929" />
-          <stop offset="1" stop-color="#0E0E0E" />
+          <stop stopColor="#2A2929" />
+          <stop offset="1" stopColor="#0E0E0E" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_8182_21406"
@@ -196,8 +196,8 @@ export const Empty = () => {
           y2="143.694"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#222222" />
-          <stop offset="1" stop-color="#282828" />
+          <stop stopColor="#222222" />
+          <stop offset="1" stopColor="#282828" />
         </linearGradient>
         <linearGradient
           id="paint2_linear_8182_21406"
@@ -207,8 +207,8 @@ export const Empty = () => {
           y2="6.56666"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#111010" />
-          <stop offset="1" stop-color="#414141" />
+          <stop stopColor="#111010" />
+          <stop offset="1" stopColor="#414141" />
         </linearGradient>
         <linearGradient
           id="paint3_linear_8182_21406"
@@ -218,8 +218,8 @@ export const Empty = () => {
           y2="258.804"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#2A2929" />
-          <stop offset="1" stop-color="#0E0E0E" />
+          <stop stopColor="#2A2929" />
+          <stop offset="1" stopColor="#0E0E0E" />
         </linearGradient>
         <linearGradient
           id="paint4_linear_8182_21406"
@@ -229,8 +229,8 @@ export const Empty = () => {
           y2="170.733"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#222222" />
-          <stop offset="1" stop-color="#282828" />
+          <stop stopColor="#222222" />
+          <stop offset="1" stopColor="#282828" />
         </linearGradient>
         <linearGradient
           id="paint5_linear_8182_21406"
@@ -240,8 +240,8 @@ export const Empty = () => {
           y2="33.6057"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#111010" />
-          <stop offset="1" stop-color="#414141" />
+          <stop stopColor="#111010" />
+          <stop offset="1" stopColor="#414141" />
         </linearGradient>
         <linearGradient
           id="paint6_linear_8182_21406"
@@ -251,8 +251,8 @@ export const Empty = () => {
           y2="292.796"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#2A2929" />
-          <stop offset="1" stop-color="#0E0E0E" />
+          <stop stopColor="#2A2929" />
+          <stop offset="1" stopColor="#0E0E0E" />
         </linearGradient>
         <linearGradient
           id="paint7_linear_8182_21406"
@@ -262,8 +262,8 @@ export const Empty = () => {
           y2="204.725"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#222222" />
-          <stop offset="1" stop-color="#282828" />
+          <stop stopColor="#222222" />
+          <stop offset="1" stopColor="#282828" />
         </linearGradient>
         <linearGradient
           id="paint8_linear_8182_21406"
@@ -273,8 +273,8 @@ export const Empty = () => {
           y2="67.5979"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#111010" />
-          <stop offset="1" stop-color="#414141" />
+          <stop stopColor="#111010" />
+          <stop offset="1" stopColor="#414141" />
         </linearGradient>
         <clipPath id="clip0_8182_21406">
           <rect width="288.161" height="231.765" rx="10.8157" fill="white" />

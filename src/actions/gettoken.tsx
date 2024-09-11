@@ -3,12 +3,11 @@
 import { auth } from "@/auth";
 
 export const getAccessToken = async (): Promise<string | null> => {
-  const session = await auth(); // Must run on server-side only
+  const session = await auth(); 
   return session?.accessToken || null;
 };
 
 export const getUser = async () => {
-  const session = await auth(); // Must run on server-side only
-  console.log(session)
+  const session = await auth();
   return session?.user || null;
 }

@@ -10,6 +10,8 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { useGetFileListQuery , useUpdateFileMutation} from "@/lib/store/Service/User_Auth_Api";
+import { WebsocketProvider } from 'y-websocket';
+import * as Y from 'yjs';
 
 function Workspace({ accessToken, params }: any) {
   const [fileData, setFileData] = useState<FILE | any>();
@@ -45,6 +47,9 @@ function Workspace({ accessToken, params }: any) {
     setIsSaveEnabled(false);
   };
 
+  const ydoc = new Y.Doc();
+  const provider = new WebsocketProvider(`ws://localhost:8000/ws/documents/`, params, ydoc);
+
   return (
     <div className="w-full">
       <WorkspaceHeader fileName={fileData?.filename} setType={setType} type={type} onSave={() => handleSave()} isSaveEnabled={isSaveEnabled} isLoadingUpdate={isLoadingUpdate} />
@@ -64,6 +69,8 @@ function Workspace({ accessToken, params }: any) {
                 fileData={fileData}
                 setDocumentData={setDocumentData}
                 documentData={documentData}
+                ydoc={ydoc}
+                provider={provider}
               />
             </div>
           </ResizablePanel>

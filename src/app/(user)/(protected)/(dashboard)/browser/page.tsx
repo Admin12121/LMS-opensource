@@ -19,7 +19,7 @@ const Browser = dynamic(() => import('@/components/browser/browser'), {
 });
 
 export default async function BrowserPage() {
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessToken()  
   return (
     <ContentLayout title="All Posts">
       <Breadcrumb>

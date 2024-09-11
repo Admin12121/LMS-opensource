@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react'
-import { useUpdateFileMutation } from "@/lib/store/Service/User_Auth_Api"
+import * as Y from 'yjs';
 import EditorJS  from '@editorjs/editorjs';
 // @ts-ignore
 import Header from '@editorjs/header';
@@ -46,7 +46,7 @@ const rawDocument={
     }],
     "version" : "2.8.1"
 }
-function Editor({  fileData, Loading, documentData, setDocumentData }: { Loading: boolean, fileData: FILE,  documentData: any, setDocumentData: (data: any) => void }) {
+function Editor({  fileData, Loading, documentData, setDocumentData, ydoc, provider }: { ydoc: Y.Doc, provider: any, Loading: boolean, fileData: FILE,  documentData: any, setDocumentData: (data: any) => void }) {
 
     const ref=useRef<EditorJS>();
     const [document,setDocument]=useState(rawDocument);
@@ -109,6 +109,21 @@ function Editor({  fileData, Loading, documentData, setDocumentData }: { Loading
             }            
           });
           ref.current=editor;
+          const yText = ydoc.getText('editor');
+          yText.observe(event => {
+            const content = yText.toString();
+            editor.render(JSON.parse(content));
+          });
+
+          editor.isReady.then(() => {
+            editor.save().then((outputData) => {
+              yText.insert(0, JSON.stringify(outputData));
+            });
+          });
+
+          provider.on('status', (event:any) => {
+            console.log(event.status); // logs "connected" or "disconnected"
+          });          
     }
 
   return (
