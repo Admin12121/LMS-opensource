@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import WorkspaceHeader from "../_components/WorkspaceHeader";
 import Editor from "../_components/Editor";
 import { FILE } from "@/schemas";
@@ -9,32 +9,104 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { useGetFileListQuery , useUpdateFileMutation} from "@/lib/store/Service/User_Auth_Api";
-import { WebsocketProvider } from 'y-websocket';
-import * as Y from 'yjs';
+import {
+  useGetFileListQuery,
+  useUpdateFileMutation,
+} from "@/lib/store/Service/User_Auth_Api";
 
-function Workspace({ accessToken, params }: any) {
+function Workspace({ user, accessToken, params }: any) {
   const [fileData, setFileData] = useState<FILE | any>();
-  const [initialDocumentData, setInitialDocumentData] = useState<any>(null);
-  const [initialWhiteBoardData, setInitialWhiteBoardData] = useState<any>(null);
-  const [type, setType] = useState<string>("Both");
-  const [documentData, setDocumentData] = useState<any>(null);
-  const [whiteBoardData, setWhiteBoardData] = useState<any>(null);
+  const [documentData, setDocumentData] = useState<string>('');
+  const [socketDocumentData, setSocketDocumentData] = useState<string>('');
+  const [socketWhiteBoardData, setSocketWhiteBoardData] = useState<string>('');
+  const [whiteBoardData, setWhiteBoardData] = useState<string>('');
   const [isSaveEnabled, setIsSaveEnabled] = useState(false);
-  const { data, refetch, isLoading } = useGetFileListQuery({ accessToken, slug: params });
-  const [updateFile, {isLoading:isLoadingUpdate}] = useUpdateFileMutation();
+  const { data, refetch, isLoading } = useGetFileListQuery({
+    accessToken,
+    slug: params,
+  });
+  const [updateFile, { isLoading: isLoadingUpdate }] = useUpdateFileMutation();
+  const [localChanges, setLocalChanges] = useState<boolean>(false);
 
-  useEffect(()=>{
-    setFileData(data);
-    setInitialDocumentData(data?.document);
-    setInitialWhiteBoardData(data?.whiteboard);
-  },[data]);
+  const [ws, setWs] = useState<WebSocket | null>(null);
+  const documentUpdateFromSocket = useRef(false);
+  const whiteBoardUpdateFromSocket = useRef(false);
+  
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const isDocumentChanged = JSON.stringify(documentData) !== JSON.stringify(initialDocumentData);
-    const isWhiteBoardChanged = JSON.stringify(whiteBoardData) !== JSON.stringify(initialWhiteBoardData);
-    setIsSaveEnabled(isDocumentChanged || isWhiteBoardChanged);
-  }, [documentData, whiteBoardData, initialDocumentData, initialWhiteBoardData]);
+    setFileData(data);
+  }, [data]);
+
+  useEffect(() => {
+    if (fileData) {
+      setDocumentData(fileData.document);
+      setWhiteBoardData(fileData.whiteboard);
+    }
+  }, [fileData]);
+
+  useEffect(() => {
+    const socketUrl = `ws://localhost:8000/ws/canvas/${params}/collaboration/?token=${accessToken}`;
+    const socket = new WebSocket(socketUrl);
+
+    socket.onopen = () => {
+      console.log("WebSocket connected");
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === "collaboration_message") {
+        const sender = data.user.email;
+        if (sender !== user.email) {
+          if (data.document) {
+            documentUpdateFromSocket.current = true;
+            updateDocumentData(data.document);
+          }
+          if (data.whiteboard) {
+            whiteBoardUpdateFromSocket.current = true;
+            updateWhiteboardData(data.whiteboard);
+          }
+        }
+      }
+    };
+
+    socket.onclose = () => {
+      console.log("WebSocket disconnected");
+    };
+
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    setWs(socket);
+    return () => {
+      socket.close();
+    };
+  }, [params, accessToken]);
+
+  const updateDocumentData = (newDocumentData: any) => {
+    // Check if the update came from the socket or local user
+    if (!documentUpdateFromSocket.current) {
+      setDocumentData(newDocumentData);
+    }
+    documentUpdateFromSocket.current = false;
+  };
+
+  const updateWhiteboardData = (newWhiteboardData: any) => {
+    // Similar logic for whiteboard updates
+    if (!whiteBoardUpdateFromSocket.current) {
+      setWhiteBoardData(newWhiteboardData);
+    }
+    whiteBoardUpdateFromSocket.current = false;
+  };
+
+  // Debounce function for saving changes to avoid flooding server with requests
+  const debounceSave = (saveFunction: () => void, delay: number) => {
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+    debounceTimer.current = setTimeout(saveFunction, delay);
+  };
 
   const handleSave = async () => {
     const payload = {
@@ -42,55 +114,68 @@ function Workspace({ accessToken, params }: any) {
       whiteboard: JSON.stringify(whiteBoardData),
     };
     await updateFile({ accessToken, data: payload, slug: params });
-    setInitialDocumentData(documentData);
-    setInitialWhiteBoardData(whiteBoardData); 
     setIsSaveEnabled(false);
   };
 
-  const ydoc = new Y.Doc();
-  const provider = new WebsocketProvider(`ws://localhost:8000/ws/documents/`, params, ydoc);
+  const sendUpdate = (type: string, data: any) => {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      const payload = {
+        type: "collaboration_message",
+        [type]: data,
+        user: {
+          email: user.email, // Track user info
+          name: user.name,   // Track user's name
+        },
+      };
+      ws.send(JSON.stringify(payload));
+    }
+  };
+
+  useEffect(() => {
+    if (localChanges) {
+      debounceSave(() => {
+        sendUpdate('document', socketDocumentData);
+        sendUpdate('whiteboard', socketWhiteBoardData);
+        setLocalChanges(false);
+      }, 300);
+    }
+  }, [socketWhiteBoardData, socketDocumentData, ws]);
 
   return (
     <div className="w-full">
-      <WorkspaceHeader fileName={fileData?.filename} setType={setType} type={type} onSave={() => handleSave()} isSaveEnabled={isSaveEnabled} isLoadingUpdate={isLoadingUpdate} />
+      <WorkspaceHeader
+        fileName={fileData?.filename}
+        onSave={handleSave}
+        isSaveEnabled={isSaveEnabled}
+        isLoadingUpdate={isLoadingUpdate}
+      />
       <ResizablePanelGroup
         direction="horizontal"
         className="h-full items-stretch max-w-[2400px]"
-        key={type}
       >
-        {(type === "Document" || type === "Both") && (
-          <ResizablePanel
-            minSize={30}
-            className="overflow-hidden overflow-y-auto h-[calc(100vh-66px)]"
-          >
-            <div className="h-screen">
-              <Editor
-                Loading={isLoading}
-                fileData={fileData}
-                setDocumentData={setDocumentData}
-                documentData={documentData}
-                ydoc={ydoc}
-                provider={provider}
-              />
-            </div>
-          </ResizablePanel>
-        )}
-        {type === "Both" && <ResizableHandle className="bg-transparent w-2 max-md:hidden" />}
-        {(type === "Canvas" || type === "Both") && (
-          <ResizablePanel
-            minSize={30}
-            className="overflow-hidden overflow-y-auto h-[calc(100vh-66px)]"
-          >
-            <div className="h-screen border-l">
-              <Canvas
-                Loading={isLoading}
-                fileData={fileData}
-                setWhiteBoardData={setWhiteBoardData}
-                whiteBoardData={whiteBoardData}
-              />
-            </div>
-          </ResizablePanel>
-        )}
+        <ResizablePanel
+          minSize={30}
+          className="overflow-hidden overflow-y-auto h-[calc(100vh-66px)]"
+        >
+          <Editor
+            setLocalChanges={setLocalChanges}
+            Loading={isLoading}
+            setDocumentData={setSocketDocumentData}
+            documentData={documentData}
+          />
+          {/* <TiptapEditor/> */}
+        </ResizablePanel>
+        <ResizableHandle className="bg-transparent w-2 max-md:hidden" />
+        <ResizablePanel
+          minSize={30}
+          className="overflow-hidden overflow-y-auto h-[calc(100vh-66px)]"
+        >
+          {<Canvas
+            Loading={isLoading}
+            setWhiteBoardData={setSocketWhiteBoardData}
+            whiteBoardData={whiteBoardData}
+          />}
+        </ResizablePanel>
       </ResizablePanelGroup>
     </div>
   );

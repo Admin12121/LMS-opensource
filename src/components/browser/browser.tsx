@@ -15,6 +15,7 @@ const Browser = ({ accessToken }: { accessToken: string }) => {
     page,
     accessToken,
   });
+  const [messages, setMessages] = useState<string[]>([]);       
   
   useEffect(() => {
     const socket = new WebSocket(
@@ -25,7 +26,6 @@ const Browser = ({ accessToken }: { accessToken: string }) => {
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       const notification = JSON.parse(data.message);
-      const [messages, setMessages] = useState<string[]>([]);       
       toast.success(notification.title);
       setMessages((prevMessages) => [...prevMessages, data.message]);
     };

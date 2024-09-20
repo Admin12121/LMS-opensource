@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${jakarta.className} dark:bg-black`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+            {children}
         </ThemeProvider>
       </body>
     </html>

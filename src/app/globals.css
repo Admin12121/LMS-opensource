@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './editor.css';
+
+
 html {
   --scroll-behavior: smooth !important;
   scroll-behavior: smooth !important;
@@ -270,4 +273,36 @@ body{
   float: left;
   height: 0;
   pointer-events: none;
+}
+
+.ProseMirror .collaboration-cursor__caret {
+  pointer-events: none;
+  position: relative;
+  margin-left: -1px;
+  margin-right: -1px;
+  overflow-wrap: normal;
+  word-break: normal;
+  border-right-width: 1px;
+  border-left-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(0 0 0 / var(--tw-border-opacity));
+}
+
+.ProseMirror .collaboration-cursor__label {
+  position: absolute;
+  left: -1px;
+  top: -1.4em;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+  border-radius: .25rem;
+  border-top-left-radius: 0;
+  padding: .125rem .375rem;
+  font-size: .75rem;
+  line-height: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
 }

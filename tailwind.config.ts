@@ -11,6 +11,7 @@ const config = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   prefix: "",
+  safelist: ['ProseMirror'],
   theme: {
     container: {
       center: true,
